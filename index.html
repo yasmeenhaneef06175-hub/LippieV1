@@ -458,63 +458,83 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(2, 16, 24, 0.9);
+      background: rgba(2, 16, 24, 0.95);
       z-index: 1000;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
       animation: fadeIn 0.5s ease-in;
     }
 
     .loading-animation {
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       position: relative;
+      transform: scale(1);
+      animation: pulseLoader 2s infinite ease-in-out;
     }
 
     .loading-circle {
       position: absolute;
       width: 100%;
       height: 100%;
-      border: 3px solid transparent;
+      border: 4px solid transparent;
       border-top-color: var(--cyan);
       border-radius: 50%;
-      animation: spin 1.5s ease-in-out infinite;
+      animation: spin 1.2s ease-in-out infinite, glow 1.5s infinite;
     }
 
     .loading-circle:nth-child(2) {
       border-top-color: var(--cyan-light);
-      animation-delay: 0.3s;
+      animation-delay: 0.4s;
     }
 
     .loading-circle:nth-child(3) {
       border-top-color: var(--cyan-dark);
-      animation-delay: 0.6s;
+      animation-delay: 0.8s;
     }
 
     .loading-text {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       color: var(--cyan);
-      animation: pulseText 1.5s infinite ease-in-out;
+      text-shadow: 0 0 10px var(--cyan);
+      animation: glowText 1.5s infinite ease-in-out;
     }
 
     .error-message {
       display: none;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       color: #ff6b6b;
-      background: rgba(255, 0, 0, 0.15);
+      background: rgba(255, 0, 0, 0.2);
       padding: 12px 24px;
       border-radius: 8px;
       max-width: 90%;
       text-align: center;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+      animation: fadeIn 0.5s ease-in;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px var(--cyan); }
+      50% { box-shadow: 0 0 15px var(--cyan); }
+    }
+
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 5px var(--cyan); }
+      50% { text-shadow: 0 0 15px var(--cyan); }
+    }
+
+    @keyframes pulseLoader {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
     @keyframes fadeIn {
@@ -615,6 +635,7 @@
       .feature-card p, .faq-slide h3 { font-size: 13px; }
       .test-slide p { font-size: 12px; }
       .test-slide .user-name { font-size: 11px; }
+      .loading-animation { width: 60px; height: 60px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -624,6 +645,9 @@
       }
       #bgCanvas {
         display: none;
+      }
+      .loading-circle, .loading-text, .loading-animation {
+        animation: none;
       }
     }
 
@@ -662,10 +686,10 @@
       <h1 class="h1">Lippie Clip Generator</h1>
       <p class="lead">Enter a YouTube URL to generate short clips with subtitles!</p>
       <div class="input-card">
-        <form id="clip-form">
+        <form id="clip-form" onsubmit="return false;">
           <div class="form-group">
             <input type="text" id="youtube-url" placeholder="Enter YouTube URL (e.g., https://youtube.com/watch?v=...)" required aria-label="YouTube URL input">
-            <button type="submit" class="btn btn-primary" id="generate-btn" aria-label="Generate video clips">Generate Clips</button>
+            <button type="button" class="btn btn-primary" id="generate-btn" aria-label="Generate video clips">Generate Clips</button>
           </div>
         </form>
         <div class="status" id="status">Status: Ready to create your clips...</div>
@@ -831,206 +855,212 @@
       }
 
       // WebGL particle background
-      const canvas = document.getElementById('bgCanvas');
-      if (canvas) {
-        try {
+      try {
+        const canvas = document.getElementById('bgCanvas');
+        if (canvas) {
           const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
           if (!gl) {
             console.warn('WebGL not supported; hiding canvas.');
             canvas.style.display = 'none';
-            return;
-          }
-
-          function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-          }
-          window.addEventListener('resize', resize);
-          resize();
-
-          const vsSource = `
-            attribute vec2 a_position;
-            attribute float a_index;
-            uniform vec2 u_mouse;
-            uniform float u_time;
-            void main() {
-              vec2 pos = a_position;
-              vec2 dist = u_mouse - pos;
-              float len = length(dist);
-              pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
-              float scale = 0.8 + 0.4 * sin(u_time + a_index);
-              gl_Position = vec4(pos * scale, 0.0, 1.0);
-              gl_PointSize = 3.0 * scale;
+          } else {
+            function resize() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+              gl.viewport(0, 0, canvas.width, canvas.height);
             }
-          `;
-          const fsSource = `
-            precision mediump float;
-            uniform float u_time;
-            void main() {
-              float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
-              vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
-              gl_FragColor = vec4(color, 0.8);
+            window.addEventListener('resize', resize);
+            resize();
+
+            const vsSource = `
+              attribute vec2 a_position;
+              attribute float a_index;
+              uniform vec2 u_mouse;
+              uniform float u_time;
+              void main() {
+                vec2 pos = a_position;
+                vec2 dist = u_mouse - pos;
+                float len = length(dist);
+                pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
+                float scale = 0.8 + 0.4 * sin(u_time + a_index);
+                gl_Position = vec4(pos * scale, 0.0, 1.0);
+                gl_PointSize = 3.0 * scale;
+              }
+            `;
+            const fsSource = `
+              precision mediump float;
+              uniform float u_time;
+              void main() {
+                float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
+                vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
+                gl_FragColor = vec4(color, 0.8);
+              }
+            `;
+
+            function createShader(gl, type, source) {
+              const shader = gl.createShader(type);
+              gl.shaderSource(shader, source);
+              gl.compileShader(shader);
+              if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.warn('Shader compilation failed:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+              }
+              return shader;
             }
-          `;
 
-          function createShader(gl, type, source) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-              console.warn('Shader compilation failed:', gl.getShaderInfoLog(shader));
-              gl.deleteShader(shader);
-              return null;
+            const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+            if (!vertexShader || !fragmentShader) {
+              console.warn('Shader creation failed; hiding canvas.');
+              canvas.style.display = 'none';
+            } else {
+              const program = gl.createProgram();
+              gl.attachShader(program, vertexShader);
+              gl.attachShader(program, fragmentShader);
+              gl.linkProgram(program);
+              if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.warn('Program linking failed:', gl.getProgramInfoLog(program));
+                canvas.style.display = 'none';
+              } else {
+                gl.useProgram(program);
+
+                const positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                const positions = new Float32Array(1000);
+                const indices = new Float32Array(500);
+                for (let i = 0; i < 1000; i += 2) {
+                  positions[i] = Math.random() * 2 - 1;
+                  positions[i + 1] = Math.random() * 2 - 1;
+                  indices[i / 2] = i / 2;
+                }
+                gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+                const positionLocation = gl.getAttribLocation(program, 'a_position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+                const indexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+                const indexLocation = gl.getAttribLocation(program, 'a_index');
+                gl.enableVertexAttribArray(indexLocation);
+                gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
+
+                const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+                const timeLocation = gl.getUniformLocation(program, 'u_time');
+                let mouseX = 0, mouseY = 0;
+                document.addEventListener('mousemove', (e) => {
+                  mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                  mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                });
+
+                function render() {
+                  gl.uniform2f(mouseLocation, mouseX, mouseY);
+                  gl.uniform1f(timeLocation, performance.now() / 1000);
+                  gl.clearColor(0.016, 0.063, 0.133, 1.0);
+                  gl.clear(gl.COLOR_BUFFER_BIT);
+                  gl.drawArrays(gl.POINTS, 0, 500);
+                  requestAnimationFrame(render);
+                }
+                render();
+              }
             }
-            return shader;
           }
-
-          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
-          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-          if (!vertexShader || !fragmentShader) {
-            console.warn('Shader creation failed; hiding canvas.');
-            canvas.style.display = 'none';
-            return;
-          }
-
-          const program = gl.createProgram();
-          gl.attachShader(program, vertexShader);
-          gl.attachShader(program, fragmentShader);
-          gl.linkProgram(program);
-          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            console.warn('Program linking failed:', gl.getProgramInfoLog(program));
-            canvas.style.display = 'none';
-            return;
-          }
-          gl.useProgram(program);
-
-          const positionBuffer = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-          const positions = new Float32Array(1000);
-          const indices = new Float32Array(500);
-          for (let i = 0; i < 1000; i += 2) {
-            positions[i] = Math.random() * 2 - 1;
-            positions[i + 1] = Math.random() * 2 - 1;
-            indices[i / 2] = i / 2;
-          }
-          gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-          const positionLocation = gl.getAttribLocation(program, 'a_position');
-          gl.enableVertexAttribArray(positionLocation);
-          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-          const indexBuffer = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
-          gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
-          const indexLocation = gl.getAttribLocation(program, 'a_index');
-          gl.enableVertexAttribArray(indexLocation);
-          gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
-
-          const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
-          const timeLocation = gl.getUniformLocation(program, 'u_time');
-          let mouseX = 0, mouseY = 0;
-          document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-          });
-
-          function render() {
-            gl.uniform2f(mouseLocation, mouseX, mouseY);
-            gl.uniform1f(timeLocation, performance.now() / 1000);
-            gl.clearColor(0.016, 0.063, 0.133, 1.0);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.drawArrays(gl.POINTS, 0, 500);
-            requestAnimationFrame(render);
-          }
-          render();
-        } catch (err) {
-          console.warn('WebGL initialization failed:', err.message);
-          canvas.style.display = 'none';
+        } else {
+          console.warn('Canvas element not found.');
         }
-      } else {
-        console.warn('Canvas element not found.');
+      } catch (err) {
+        console.warn('WebGL initialization failed:', err.message);
       }
 
       // Custom cursor
-      if (typeof gsap !== 'undefined') {
-        const cursor = document.querySelector('.cursor');
-        if (cursor) {
-          gsap.set(cursor, { opacity: 1, visibility: 'visible' });
-          document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
-          });
-          document.querySelectorAll('a, button, input').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-          });
+      try {
+        if (typeof gsap !== 'undefined') {
+          const cursor = document.querySelector('.cursor');
+          if (cursor) {
+            gsap.set(cursor, { opacity: 1, visibility: 'visible' });
+            document.addEventListener('mousemove', (e) => {
+              gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
+            });
+            document.querySelectorAll('a, button, input').forEach(el => {
+              el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+              el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+          } else {
+            console.warn('Cursor element not found.');
+          }
         } else {
-          console.warn('Cursor element not found.');
+          console.warn('GSAP not loaded; custom cursor disabled.');
         }
-      } else {
-        console.warn('GSAP not loaded; custom cursor disabled.');
+      } catch (err) {
+        console.warn('Custom cursor initialization failed:', err.message);
       }
 
       // GSAP animations
-      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
-        const reveals = document.querySelectorAll('.reveal');
-        if (reveals.length) {
-          reveals.forEach(el => {
-            gsap.fromTo(el, 
-              { opacity: 0, y: 10 },
+      try {
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          gsap.registerPlugin(ScrollTrigger);
+          const reveals = document.querySelectorAll('.reveal');
+          if (reveals.length) {
+            reveals.forEach(el => {
+              gsap.fromTo(el, 
+                { opacity: 0, y: 10 },
+                { 
+                  opacity: 1, 
+                  y: 0, 
+                  duration: 0.6, 
+                  ease: 'power2.out',
+                  scrollTrigger: { 
+                    trigger: el, 
+                    start: 'top 85%', 
+                    end: 'bottom 15%', 
+                    toggleActions: 'play none none none' 
+                  }
+                }
+              );
+            });
+          } else {
+            console.warn('No .reveal elements found for GSAP animation.');
+          }
+
+          const footer = document.querySelector('footer');
+          if (footer) {
+            gsap.fromTo(footer, 
+              { opacity: 0, y: 20 },
               { 
                 opacity: 1, 
                 y: 0, 
-                duration: 0.6, 
+                duration: 1,
                 ease: 'power2.out',
                 scrollTrigger: { 
-                  trigger: el, 
-                  start: 'top 85%', 
-                  end: 'bottom 15%', 
+                  trigger: footer, 
+                  start: 'top 90%', 
                   toggleActions: 'play none none none' 
                 }
               }
             );
-          });
+          } else {
+            console.warn('Footer element not found for GSAP animation.');
+          }
         } else {
-          console.warn('No .reveal elements found for GSAP animation.');
+          console.warn('GSAP or ScrollTrigger not loaded; animations disabled.');
         }
-
-        const footer = document.querySelector('footer');
-        if (footer) {
-          gsap.fromTo(footer, 
-            { opacity: 0, y: 20 },
-            { 
-              opacity: 1, 
-              y: 0, 
-              duration: 1,
-              ease: 'power2.out',
-              scrollTrigger: { 
-                trigger: footer, 
-                start: 'top 90%', 
-                toggleActions: 'play none none none' 
-              }
-            }
-          );
-        } else {
-          console.warn('Footer element not found for GSAP animation.');
-        }
-      } else {
-        console.warn('GSAP or ScrollTrigger not loaded; animations disabled.');
+      } catch (err) {
+        console.warn('GSAP animations initialization failed:', err.message);
       }
 
-      // Form submission logic with loading animation and error message
-      const form = document.getElementById('clip-form');
+      // Form submission logic with enhanced loading animation
+      const generateBtn = document.getElementById('generate-btn');
       const youtubeUrlInput = document.getElementById('youtube-url');
       const status = document.getElementById('status');
       const loadingOverlay = document.getElementById('loading-overlay');
       const errorMessage = document.getElementById('error-message');
       const results = document.getElementById('results');
 
-      if (form && youtubeUrlInput && status && loadingOverlay && errorMessage && results) {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
+      if (generateBtn && youtubeUrlInput && status && loadingOverlay && errorMessage && results) {
+        generateBtn.addEventListener('click', async () => {
           const url = youtubeUrlInput.value.trim();
+
+          // Validate input
           if (!url) {
             status.classList.add('error');
             status.textContent = 'Error: Please paste a YouTube URL';
@@ -1043,18 +1073,26 @@
             youtubeUrlInput.focus();
             return;
           }
+
+          // Show loading animation
           status.textContent = 'Starting clip generation...';
           status.classList.remove('error');
           loadingOverlay.style.display = 'flex';
+          loadingOverlay.querySelector('.loading-animation').style.display = 'block';
+          loadingOverlay.querySelector('.loading-text').style.display = 'block';
+          errorMessage.style.display = 'none';
           results.style.display = 'none';
 
+          // Simulate processing with random delay (3-8 seconds)
           const randomDelay = Math.floor(Math.random() * (8000 - 3000 + 1)) + 3000;
           await new Promise(resolve => setTimeout(resolve, randomDelay));
 
+          // Hide loading animation and show error message
           loadingOverlay.querySelector('.loading-animation').style.display = 'none';
           loadingOverlay.querySelector('.loading-text').style.display = 'none';
           errorMessage.style.display = 'block';
 
+          // Reset after 3 seconds
           setTimeout(() => {
             loadingOverlay.style.display = 'none';
             errorMessage.style.display = 'none';
@@ -1062,10 +1100,18 @@
             loadingOverlay.querySelector('.loading-text').style.display = 'block';
             status.textContent = 'Status: Ready to create your clips...';
             youtubeUrlInput.value = '';
+            youtubeUrlInput.focus();
           }, 3000);
         });
       } else {
-        console.warn('Form elements not found.');
+        console.warn('Form elements not found:', {
+          generateBtn: !!generateBtn,
+          youtubeUrlInput: !!youtubeUrlInput,
+          status: !!status,
+          loadingOverlay: !!loadingOverlay,
+          errorMessage: !!errorMessage,
+          results: !!results
+        });
       }
 
       // Initialize navigation
