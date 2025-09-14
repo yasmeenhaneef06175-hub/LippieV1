@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Lippie AI Privacy Policy explains how we collect, use, and protect your data when using our AI-powered clip generator.">
   <meta name="keywords" content="Lippie AI, privacy policy, data protection, AI clip generator">
+  <meta name="google-adsense-account" content="ca-pub-5278017339767767">
   <meta property="og:title" content="Lippie AI - Privacy Policy">
   <meta property="og:description" content="Learn how Lippie AI handles your data and ensures privacy while generating video clips.">
   <meta property="og:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
@@ -25,7 +26,7 @@
     gtag('js', new Date());
     gtag('config', 'G-XXXXXXXXXX');
   </script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5278017339767767" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -74,7 +75,6 @@
       z-index: -30;
       pointer-events: none;
       background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
-      mix-blend-mode: normal;
       transition: opacity 0.4s linear;
     }
 
@@ -111,28 +111,28 @@
     .container {
       max-width: var(--container);
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 16px;
       text-align: center;
     }
 
     .nav {
       position: sticky;
-      top: 16px;
+      top: 8px;
       z-index: 60;
-      display: flex;
-      justify-content: center;
-      padding: 12px 0;
+      padding: 8px 0;
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 999px;
       box-shadow: 0 8px 28px rgba(0,0,0,0.45);
       border: 1px solid rgba(255,255,255,0.03);
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .logo {
@@ -143,7 +143,7 @@
     .nav a {
       color: var(--muted);
       text-decoration: none;
-      padding: 8px 10px;
+      padding: 6px 8px;
       border-radius: 8px;
       font-weight: 600;
       font-size: 14px;
@@ -155,15 +155,25 @@
       color: var(--panel);
     }
 
+    .nav-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--cyan);
+      background: none;
+      border: none;
+      padding: 8px;
+    }
+
     .section {
-      padding: 72px 0;
+      padding: 48px 0;
     }
 
     .h1 {
       font-family: 'Poppins', sans-serif;
-      font-size: 36px;
-      line-height: 1.02;
-      margin: 14px 0 8px;
+      font-size: 28px;
+      line-height: 1.1;
+      margin: 12px 0 8px;
       font-weight: 800;
       background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
       -webkit-background-clip: text;
@@ -172,20 +182,23 @@
 
     h2 {
       font-family: 'Poppins', sans-serif;
-      font-size: 24px;
+      font-size: 20px;
       color: var(--cyan);
-      margin: 20px 0 10px;
+      margin: 16px 0 8px;
     }
 
     p {
       color: var(--muted);
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.5;
-      margin: 10px 0;
+      margin: 8px 0;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     footer {
-      padding: 80px 0;
+      padding: 48px 0;
       text-align: center;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
       border-top: 1px solid var(--glass);
@@ -197,15 +210,15 @@
     .footer-container {
       max-width: var(--container);
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 16px;
       color: #fff;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.9rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
-      min-height: 120px;
+      gap: 8px;
+      min-height: 100px;
     }
 
     .footer-container span {
@@ -215,26 +228,58 @@
     }
 
     .footer-links {
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .footer-links a {
       color: var(--muted);
       text-decoration: none;
-      padding: 0 8px;
-      font-size: 14px;
+      padding: 0 6px;
+      font-size: 12px;
     }
 
     .footer-links a:hover {
       color: var(--cyan);
     }
 
-    @media (max-width: 980px) {
-      .h1 { font-size: 22px; }
+    .adsense-container {
+      margin: 16px auto;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .nav-inner {
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
+      }
+
+      .nav-inner.active {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .h1 { font-size: 24px; }
+      h2 { font-size: 18px; }
+      p { font-size: 13px; }
       .footer-container {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
+      .section { padding: 32px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .h1 { font-size: 20px; }
+      h2 { font-size: 16px; }
+      p { font-size: 12px; }
+      .nav a { font-size: 13px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -260,39 +305,71 @@
   <div class="cursor"></div>
 
   <nav class="nav">
-    <div class="nav-inner container">
-      <div class="logo">Lippie AI</div>
-      <a class="nav-link" href="/">Home</a>
-      <a class="nav-link" href="/#features">Features</a>
-      <a class="nav-link" href="/#why">Why Lippie</a>
-      <a class="nav-link" href="/#reviews">Reviews</a>
-      <a class="nav-link" href="/#faq">FAQ</a>
-      <a class="nav-link" href="/privacy-policy.html">Privacy</a>
-      <a class="nav-link" href="/terms.html">Terms</a>
-      <a class="nav-link" href="/contact.html">Contact</a>
+    <div class="container">
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <div class="nav-inner">
+        <div class="logo">Lippie AI</div>
+        <a class="nav-link" href="/index.html">Home</a>
+        <a class="nav-link" href="/index.html#features">Features</a>
+        <a class="nav-link" href="/index.html#why">Why Lippie</a>
+        <a class="nav-link" href="/index.html#reviews">Reviews</a>
+        <a class="nav-link" href="/index.html#faq">FAQ</a>
+        <a class="nav-link" href="/privacy-policy.html">Privacy</a>
+        <a class="nav-link" href="/terms.html">Terms</a>
+        <a class="nav-link" href="/contact.html">Contact</a>
+      </div>
     </div>
   </nav>
 
   <main class="container">
     <section class="section reveal">
       <h1 class="h1">Privacy Policy</h1>
-      <p>Last updated: September 11, 2025</p>
-      <p>Lippie AI ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website or use our services.</p>
-      <h2>Information We Collect</h2>
-      <p>We may collect personal information such as your email address when you contact us. We also collect non-personal data like cookies and usage analytics to improve our services.</p>
-      <h2>How We Use Your Information</h2>
-      <p>Your information is used to provide and improve our services, process clip generation requests, and communicate with you. We do not sell your data to third parties.</p>
-      <h2>Cookies</h2>
-      <p>We use cookies to enhance user experience and track site performance via Google Analytics. You can manage cookie preferences in your browser settings.</p>
-      <h2>Data Protection</h2>
-      <p>We implement security measures to protect your data, but no system is 100% secure. Please contact us if you suspect a breach.</p>
-      <h2>Third-Party Services</h2>
-      <p>We use YouTube APIs to process videos. Their privacy policies apply when you submit URLs.</p>
-      <h2>Your Rights</h2>
-      <p>Under GDPR (if applicable), you have rights to access, correct, or delete your data. Contact us at sufiyanuu06175@gmail.com to exercise these rights.</p>
-      <h2>Contact Us</h2>
-      <p>For questions, email us at <a href="mailto:sufiyanuu06175@gmail.com">sufiyanuu06175@gmail.com</a>.</p>
+      <p>Last updated: September 14, 2025</p>
+
+      <h2>1. Introduction</h2>
+      <p>Welcome to Lippie AI. We are committed to protecting your privacy and ensuring your data is handled responsibly. This Privacy Policy explains how we collect, use, and protect your information when you use our website and services.</p>
+
+      <h2>2. Information We Collect</h2>
+      <p>We may collect the following types of information:</p>
+      <p>- <strong>Personal Information:</strong> Name, email address, and other details you provide when contacting us.</p>
+      <p>- <strong>Usage Data:</strong> Information about how you interact with our website, such as IP address, browser type, and pages visited.</p>
+      <p>- <strong>YouTube URLs:</strong> URLs you submit to generate video clips, which may include metadata about the videos.</p>
+
+      <h2>3. How We Use Your Information</h2>
+      <p>Your information is used to:</p>
+      <p>- Process YouTube URLs to generate video clips with subtitles.</p>
+      <p>- Respond to your inquiries and provide customer support.</p>
+      <p>- Improve our services through analytics and usage data.</p>
+
+      <h2>4. Data Sharing</h2>
+      <p>We do not sell or share your personal information with third parties, except:</p>
+      <p>- With service providers (e.g., hosting or analytics) who assist in operating our website.</p>
+      <p>- When required by law or to protect our rights.</p>
+
+      <h2>5. Cookies</h2>
+      <p>We use cookies to enhance your experience and analyze website performance. You can disable cookies in your browser settings, but this may affect functionality.</p>
+
+      <h2>6. Data Security</h2>
+      <p>We implement reasonable measures to protect your data, but no system is completely secure. Please use strong passwords and secure networks when accessing our services.</p>
+
+      <h2>7. Your Rights</h2>
+      <p>You may request access to, correction, or deletion of your personal data by contacting us at <a href="mailto:sufiyanuu06175@gmail.com">sufiyanuu06175@gmail.com</a>.</p>
+
+      <h2>8. Contact Us</h2>
+      <p>For questions about this Privacy Policy, please contact us at <a href="mailto:sufiyanuu06175@gmail.com">sufiyanuu06175@gmail.com</a>.</p>
     </section>
+
+    <div class="adsense-container">
+      <ins class="adsense"
+           style="display:block"
+           data-ad-client="ca-pub-5278017339767767"
+           data-ad-slot="responsive"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
   </main>
 
   <footer class="reveal">
@@ -307,8 +384,16 @@
   </footer>
 
   <script>
-    // Ensure scripts run after DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
+      // Toggle navigation for mobile
+      const navToggle = document.querySelector('.nav-toggle');
+      const navInner = document.querySelector('.nav-inner');
+      if (navToggle && navInner) {
+        navToggle.addEventListener('click', () => {
+          navInner.classList.toggle('active');
+        });
+      }
+
       // WebGL particle background
       const canvas = document.getElementById('bgCanvas');
       if (canvas) {
@@ -320,7 +405,6 @@
             return;
           }
 
-          // Resize canvas to fit window
           function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -329,7 +413,6 @@
           window.addEventListener('resize', resize);
           resize();
 
-          // Vertex and fragment shaders
           const vsSource = `
             attribute vec2 a_position;
             attribute float a_index;
@@ -355,7 +438,6 @@
             }
           `;
 
-          // Create and compile shaders
           function createShader(gl, type, source) {
             const shader = gl.createShader(type);
             gl.shaderSource(shader, source);
@@ -376,7 +458,6 @@
             return;
           }
 
-          // Create and link program
           const program = gl.createProgram();
           gl.attachShader(program, vertexShader);
           gl.attachShader(program, fragmentShader);
@@ -388,12 +469,11 @@
           }
           gl.useProgram(program);
 
-          // Set up buffers
           const positionBuffer = gl.createBuffer();
           gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-          const positions = new Float32Array(2000);
-          const indices = new Float32Array(1000);
-          for (let i = 0; i < 2000; i += 2) {
+          const positions = new Float32Array(1000);
+          const indices = new Float32Array(500);
+          for (let i = 0; i < 1000; i += 2) {
             positions[i] = Math.random() * 2 - 1;
             positions[i + 1] = Math.random() * 2 - 1;
             indices[i / 2] = i / 2;
@@ -410,7 +490,6 @@
           gl.enableVertexAttribArray(indexLocation);
           gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
 
-          // Uniforms
           const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
           const timeLocation = gl.getUniformLocation(program, 'u_time');
           let mouseX = 0, mouseY = 0;
@@ -419,13 +498,12 @@
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
           });
 
-          // Render loop
           function render() {
             gl.uniform2f(mouseLocation, mouseX, mouseY);
             gl.uniform1f(timeLocation, performance.now() / 1000);
             gl.clearColor(0.016, 0.063, 0.133, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.drawArrays(gl.POINTS, 0, 1000);
+            gl.drawArrays(gl.POINTS, 0, 500);
             requestAnimationFrame(render);
           }
           render();
@@ -445,7 +523,7 @@
           document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
           });
-          document.querySelectorAll('a').forEach(el => {
+          document.querySelectorAll('a, button').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
             el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
           });
@@ -463,19 +541,17 @@
         if (reveals.length) {
           reveals.forEach(el => {
             gsap.fromTo(el, 
-              { opacity: 0, y: 10, rotateX: 10, rotateY: 10 },
+              { opacity: 0, y: 10 },
               { 
                 opacity: 1, 
                 y: 0, 
-                rotateX: 0, 
-                rotateY: 0, 
                 duration: 0.6, 
                 ease: 'power2.out',
                 scrollTrigger: { 
                   trigger: el, 
-                  start: 'top 80%', 
-                  end: 'bottom 20%', 
-                  toggleActions: 'restart none restart none' 
+                  start: 'top 85%', 
+                  end: 'bottom 15%', 
+                  toggleActions: 'play none none none' 
                 }
               }
             );
@@ -491,11 +567,11 @@
             { 
               opacity: 1, 
               y: 0, 
-              duration: 1.2,
+              duration: 1,
               ease: 'power2.out',
               scrollTrigger: { 
                 trigger: footer, 
-                start: 'top 95%', 
+                start: 'top 90%', 
                 toggleActions: 'play none none none' 
               }
             }
