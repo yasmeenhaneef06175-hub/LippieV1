@@ -18,6 +18,7 @@
   <link rel="icon" type="image/png" href="/static/images/favicon.png">
   <title>Lippie AI - Clip Generator</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -26,29 +27,9 @@
     gtag('config', 'G-XXXXXXXXXX');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Lippie AI",
-    "url": "https://lippie-ai.onrender.com",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://lippie-ai.onrender.com/?s={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Lippie AI",
-    "url": "https://lippie-ai.onrender.com",
-    "logo": "https://lippie-ai.onrender.com/static/images/logo.png"
-  }
-  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     :root {
       --bg: #021018;
@@ -85,7 +66,7 @@
       z-index: -40;
       width: 100%;
       height: 100%;
-      will-change: transform;
+      display: block;
     }
 
     .bg-overlay {
@@ -94,6 +75,38 @@
       z-index: -30;
       pointer-events: none;
       background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
+      mix-blend-mode: normal;
+      transition: opacity 0.4s linear;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, var(--cyan) 20%, transparent 80%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 1;
+      display: block;
+      visibility: visible;
+      transform: translate(-50%, -50%);
+      animation: pulseCursor 1.5s infinite;
+    }
+
+    .cursor.hovered {
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .cursor.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @keyframes pulseCursor {
+      0% { transform: translate(-50%, -50%) scale(0.8); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+      100% { transform: translate(-50%, -50%) scale(0.8); }
     }
 
     .container {
@@ -493,56 +506,91 @@
       to { opacity: 1; }
     }
 
-    @media (max-width: 980px) {
-      .h1 { font-size: 22px; }
-      .clip-card video { max-width: 200px; max-height: 355px; }
-      .loading-text, .error-message { font-size: 16px; }
+    footer {
+      padding: 80px 0;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-top: 1px solid var(--glass);
+      box-shadow: 0 -8px 28px rgba(0,0,0,0.45);
+      z-index: 10;
+      width: 100%;
     }
 
-    .flash-message {
-      margin: 20px auto;
-      padding: 15px;
-      border-radius: 10px;
-      max-width: 600px;
+    .footer-container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 120px;
     }
 
-    .flash-message.success {
-      background: rgba(0, 255, 0, 0.15);
-      color: #0f0;
-    }
-
-    .flash-message.error {
-      background: rgba(255, 0, 0, 0.15);
-      color: #ff6b6b;
+    .footer-container span {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .footer-links {
       margin-top: 10px;
     }
+
     .footer-links a {
       color: var(--muted);
       text-decoration: none;
       padding: 0 8px;
       font-size: 14px;
     }
+
     .footer-links a:hover {
       color: var(--cyan);
+    }
+
+    @media (max-width: 980px) {
+      .h1 { font-size: 22px; }
+      .clip-card video { max-width: 200px; max-height: 355px; }
+      .loading-text, .error-message { font-size: 16px; }
+      .footer-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+      #bgCanvas {
+        display: none;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .cursor {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
-  <div class="bg-overlay"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <div class="cursor"></div>
 
   <nav class="nav">
     <div class="nav-inner container">
       <div class="logo">Lippie AI</div>
-      <a class="nav-link" href="/">Home</a>
-      <a class="nav-link" href="#features">Features</a>
-      <a class="nav-link" href="#why">Why Lippie</a>
-      <a class="nav-link" href="#reviews">Reviews</a>
-      <a class="nav-link" href="#faq">FAQ</a>
-      <a class="nav-link" href="#cta">Get Started</a>
+      <a class="nav-link" href="/index.html">Home</a>
+      <a class="nav-link" href="/index.html#features">Features</a>
+      <a class="nav-link" href="/index.html#why">Why Lippie</a>
+      <a class="nav-link" href="/index.html#reviews">Reviews</a>
+      <a class="nav-link" href="/index.html#faq">FAQ</a>
       <a class="nav-link" href="/privacy-policy.html">Privacy</a>
       <a class="nav-link" href="/terms.html">Terms</a>
       <a class="nav-link" href="/contact.html">Contact</a>
@@ -550,7 +598,7 @@
   </nav>
 
   <main class="container">
-    <section id="hero" class="hero">
+    <section id="hero" class="hero reveal">
       <span class="kicker">AI-POWERED CLIPS</span>
       <h1 class="h1">Lippie Clip Generator</h1>
       <p class="lead">Enter a YouTube URL to generate short clips with subtitles!</p>
@@ -576,12 +624,12 @@
         <h3 class="section-title">Generated Clips</h3>
         <div id="clips-container" class="feature-slider"></div>
         <div class="cta-row">
-          <a href="/" class="btn btn-primary">Generate More</a>
+          <a href="/index.html" class="btn btn-primary">Generate More</a>
         </div>
       </div>
     </section>
 
-    <section id="features" class="section">
+    <section id="features" class="section reveal">
       <h3 class="section-title">What You Get</h3>
       <div class="feature-slider">
         <div class="feature-card">
@@ -599,7 +647,7 @@
       </div>
     </section>
 
-    <section id="why" class="section">
+    <section id="why" class="section reveal">
       <h3 class="section-title">Why Choose Lippie?</h3>
       <div class="feature-slider">
         <div class="feature-card">
@@ -614,7 +662,7 @@
       </div>
     </section>
 
-    <section id="reviews" class="section">
+    <section id="reviews" class="section reveal">
       <h3 class="section-title">What Creators Say</h3>
       <div class="test-slider">
         <div class="test-slide">
@@ -632,7 +680,7 @@
       </div>
     </section>
 
-    <section id="faq" class="section">
+    <section id="faq" class="section reveal">
       <h3 class="section-title">Frequently Asked Questions</h3>
       <div class="faq-slider">
         <div class="faq-slide">
@@ -650,76 +698,252 @@
       </div>
     </section>
 
-    <section id="cta" class="section">
+    <section id="cta" class="section reveal">
       <h3 class="section-title">Create Viral Clips</h3>
       <div class="cta-row">
-        <a href="#hero" class="btn btn-primary">Start Now</a>
+        <a href="/index.html#hero" class="btn btn-primary">Start Now</a>
       </div>
     </section>
   </main>
 
-  <footer class="container">
-    <p>© 2025 Lippie AI. Join 500k+ creators.</p>
-    <div class="footer-links">
-      <a href="/privacy-policy.html">Privacy Policy</a> |
-      <a href="/terms.html">Terms of Service</a> |
-      <a href="/contact.html">Contact</a>
+  <footer class="reveal">
+    <div class="footer-container">
+      <span>© 2025 Lippie AI.</span> Join 1.5M+ creators worldwide.
+      <div class="footer-links">
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms.html">Terms of Service</a> |
+        <a href="/contact.html">Contact</a>
+      </div>
     </div>
   </footer>
 
   <script>
-    // Looping particle background
-    try {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Handle anchor navigation
+      function handleNavigation() {
+        document.querySelectorAll('.nav a').forEach(link => {
+          link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href.startsWith('/index.html#') || href === '/index.html') {
+              e.preventDefault();
+              const isHomeLink = href === '/index.html';
+              const targetId = isHomeLink ? 'hero' : href.split('#')[1];
+              const targetElement = document.getElementById(targetId);
+              if (targetElement) {
+                window.scrollTo({
+                  top: targetElement.offsetTop,
+                  behavior: 'smooth'
+                });
+              } else if (isHomeLink) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                window.location.href = href;
+              }
+            }
+          });
+        });
+      }
+
+      // WebGL particle background
       const canvas = document.getElementById('bgCanvas');
-      if (!canvas) throw new Error('Canvas element not found');
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      const geometry = new THREE.BufferGeometry();
-      const vertices = [];
-      for (let i = 0; i < 10000; i++) {
-        vertices.push(
-          Math.random() * 2000 - 1000,
-          Math.random() * 2000 - 1000,
-          Math.random() * 2000 - 1000
-        );
-      }
-      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-      const material = new THREE.PointsMaterial({ color: 0x00f0ff, size: 2, transparent: true, opacity: 0.3 });
-      const points = new THREE.Points(geometry, material);
-      scene.add(points);
-      camera.position.z = 1000;
-      function animate() {
-        requestAnimationFrame(animate);
-        points.rotation.y += 0.0005;
-        renderer.render(scene, camera);
-      }
-      animate();
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-    } catch (err) {
-      console.warn('Three.js particle background failed:', err.message);
-    }
+      if (canvas) {
+        try {
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (!gl) {
+            console.warn('WebGL not supported; hiding canvas.');
+            canvas.style.display = 'none';
+            return;
+          }
 
-    // Form submission logic with loading animation and error message
-    try {
-      document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('clip-form');
-        const youtubeUrlInput = document.getElementById('youtube-url');
-        const status = document.getElementById('status');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const errorMessage = document.getElementById('error-message');
-        const results = document.getElementById('results');
+          function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+          }
+          window.addEventListener('resize', resize);
+          resize();
 
-        if (!form || !youtubeUrlInput || !status || !loadingOverlay || !errorMessage || !results) {
-          console.warn('Form elements not found');
-          return;
+          const vsSource = `
+            attribute vec2 a_position;
+            attribute float a_index;
+            uniform vec2 u_mouse;
+            uniform float u_time;
+            void main() {
+              vec2 pos = a_position;
+              vec2 dist = u_mouse - pos;
+              float len = length(dist);
+              pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
+              float scale = 0.8 + 0.4 * sin(u_time + a_index);
+              gl_Position = vec4(pos * scale, 0.0, 1.0);
+              gl_PointSize = 3.0 * scale;
+            }
+          `;
+          const fsSource = `
+            precision mediump float;
+            uniform float u_time;
+            void main() {
+              float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
+              vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
+              gl_FragColor = vec4(color, 0.8);
+            }
+          `;
+
+          function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+              console.warn('Shader compilation failed:', gl.getShaderInfoLog(shader));
+              gl.deleteShader(shader);
+              return null;
+            }
+            return shader;
+          }
+
+          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+          if (!vertexShader || !fragmentShader) {
+            console.warn('Shader creation failed; hiding canvas.');
+            canvas.style.display = 'none';
+            return;
+          }
+
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.warn('Program linking failed:', gl.getProgramInfoLog(program));
+            canvas.style.display = 'none';
+            return;
+          }
+          gl.useProgram(program);
+
+          const positionBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+          const positions = new Float32Array(2000);
+          const indices = new Float32Array(1000);
+          for (let i = 0; i < 2000; i += 2) {
+            positions[i] = Math.random() * 2 - 1;
+            positions[i + 1] = Math.random() * 2 - 1;
+            indices[i / 2] = i / 2;
+          }
+          gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+          const positionLocation = gl.getAttribLocation(program, 'a_position');
+          gl.enableVertexAttribArray(positionLocation);
+          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+          const indexBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
+          gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+          const indexLocation = gl.getAttribLocation(program, 'a_index');
+          gl.enableVertexAttribArray(indexLocation);
+          gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
+
+          const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+          const timeLocation = gl.getUniformLocation(program, 'u_time');
+          let mouseX = 0, mouseY = 0;
+          document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+          });
+
+          function render() {
+            gl.uniform2f(mouseLocation, mouseX, mouseY);
+            gl.uniform1f(timeLocation, performance.now() / 1000);
+            gl.clearColor(0.016, 0.063, 0.133, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.drawArrays(gl.POINTS, 0, 1000);
+            requestAnimationFrame(render);
+          }
+          render();
+        } catch (err) {
+          console.warn('WebGL initialization failed:', err.message);
+          canvas.style.display = 'none';
+        }
+      } else {
+        console.warn('Canvas element not found.');
+      }
+
+      // Custom cursor
+      if (typeof gsap !== 'undefined') {
+        const cursor = document.querySelector('.cursor');
+        if (cursor) {
+          gsap.set(cursor, { opacity: 1, visibility: 'visible' });
+          document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
+          });
+          document.querySelectorAll('a, button, input').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+          });
+        } else {
+          console.warn('Cursor element not found.');
+        }
+      } else {
+        console.warn('GSAP not loaded; custom cursor disabled.');
+      }
+
+      // GSAP animations
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        const reveals = document.querySelectorAll('.reveal');
+        if (reveals.length) {
+          reveals.forEach(el => {
+            gsap.fromTo(el, 
+              { opacity: 0, y: 10, rotateX: 10, rotateY: 10 },
+              { 
+                opacity: 1, 
+                y: 0, 
+                rotateX: 0, 
+                rotateY: 0, 
+                duration: 0.6, 
+                ease: 'power2.out',
+                scrollTrigger: { 
+                  trigger: el, 
+                  start: 'top 80%', 
+                  end: 'bottom 20%', 
+                  toggleActions: 'restart none restart none' 
+                }
+              }
+            );
+          });
+        } else {
+          console.warn('No .reveal elements found for GSAP animation.');
         }
 
+        const footer = document.querySelector('footer');
+        if (footer) {
+          gsap.fromTo(footer, 
+            { opacity: 0, y: 20 },
+            { 
+              opacity: 1, 
+              y: 0, 
+              duration: 1.2,
+              ease: 'power2.out',
+              scrollTrigger: { 
+                trigger: footer, 
+                start: 'top 95%', 
+                toggleActions: 'play none none none' 
+              }
+            }
+          );
+        } else {
+          console.warn('Footer element not found for GSAP animation.');
+        }
+      } else {
+        console.warn('GSAP or ScrollTrigger not loaded; animations disabled.');
+      }
+
+      // Form submission logic with loading animation and error message
+      const form = document.getElementById('clip-form');
+      const youtubeUrlInput = document.getElementById('youtube-url');
+      const status = document.getElementById('status');
+      const loadingOverlay = document.getElementById('loading-overlay');
+      const errorMessage = document.getElementById('error-message');
+      const results = document.getElementById('results');
+
+      if (form && youtubeUrlInput && status && loadingOverlay && errorMessage && results) {
         form.addEventListener('submit', async (e) => {
           e.preventDefault();
           const url = youtubeUrlInput.value.trim();
@@ -740,16 +964,13 @@
           loadingOverlay.style.display = 'flex';
           results.style.display = 'none';
 
-          // Simulate random delay between 3-8 seconds
           const randomDelay = Math.floor(Math.random() * (8000 - 3000 + 1)) + 3000;
           await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-          // Show error message and hide loading animation
           loadingOverlay.querySelector('.loading-animation').style.display = 'none';
           loadingOverlay.querySelector('.loading-text').style.display = 'none';
           errorMessage.style.display = 'block';
 
-          // Hide overlay and reset form after 3 seconds
           setTimeout(() => {
             loadingOverlay.style.display = 'none';
             errorMessage.style.display = 'none';
@@ -759,10 +980,13 @@
             youtubeUrlInput.value = '';
           }, 3000);
         });
-      });
-    } catch (err) {
-      console.warn('Form submission setup failed:', err.message);
-    }
+      } else {
+        console.warn('Form elements not found.');
+      }
+
+      // Initialize navigation
+      handleNavigation();
+    });
   </script>
 </body>
 </html>

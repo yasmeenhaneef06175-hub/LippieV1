@@ -7,17 +7,17 @@
   <meta name="keywords" content="Lippie AI, privacy policy, data protection, AI clip generator">
   <meta property="og:title" content="Lippie AI - Privacy Policy">
   <meta property="og:description" content="Learn how Lippie AI handles your data and ensures privacy while generating video clips.">
-  <meta property="og:image" content="https://yoursite.com/images/og-image.jpg">
-  <meta property="og:url" content="https://yoursite.com/privacy-policy.html">
+  <meta property="og:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
+  <meta property="og:url" content="https://lippie-ai.onrender.com/privacy-policy.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lippie AI - Privacy Policy">
   <meta name="twitter:description" content="Learn how Lippie AI handles your data and ensures privacy while generating video clips.">
-  <meta name="twitter:image" content="https://yoursite.com/images/og-image.jpg">
-  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <meta name="twitter:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
+  <link rel="icon" type="image/png" href="/static/images/favicon.png">
   <title>Lippie AI - Privacy Policy</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Google Analytics -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -25,8 +25,10 @@
     gtag('js', new Date());
     gtag('config', 'G-XXXXXXXXXX');
   </script>
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     :root {
       --bg: #021018;
@@ -55,6 +57,55 @@
       color: #fff;
       background: linear-gradient(180deg, #021018, #071627);
       overflow-x: hidden;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -40;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -30;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
+      mix-blend-mode: normal;
+      transition: opacity 0.4s linear;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, var(--cyan) 20%, transparent 80%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 1;
+      display: block;
+      visibility: visible;
+      transform: translate(-50%, -50%);
+      animation: pulseCursor 1.5s infinite;
+    }
+
+    .cursor.hovered {
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .cursor.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @keyframes pulseCursor {
+      0% { transform: translate(-50%, -50%) scale(0.8); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+      100% { transform: translate(-50%, -50%) scale(0.8); }
     }
 
     .container {
@@ -119,6 +170,13 @@
       -webkit-text-fill-color: transparent;
     }
 
+    h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 24px;
+      color: var(--cyan);
+      margin: 20px 0 10px;
+    }
+
     p {
       color: var(--muted);
       font-size: 16px;
@@ -126,39 +184,89 @@
       margin: 10px 0;
     }
 
+    footer {
+      padding: 80px 0;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-top: 1px solid var(--glass);
+      box-shadow: 0 -8px 28px rgba(0,0,0,0.45);
+      z-index: 10;
+      width: 100%;
+    }
+
+    .footer-container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 120px;
+    }
+
+    .footer-container span {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     .footer-links {
       margin-top: 10px;
     }
+
     .footer-links a {
       color: var(--muted);
       text-decoration: none;
       padding: 0 8px;
       font-size: 14px;
     }
+
     .footer-links a:hover {
       color: var(--cyan);
     }
 
     @media (max-width: 980px) {
       .h1 { font-size: 22px; }
+      .footer-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+      #bgCanvas {
+        display: none;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .cursor {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <div class="cursor"></div>
+
   <nav class="nav">
     <div class="nav-inner container">
       <div class="logo">Lippie AI</div>
-      <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-      {% if current_user.is_authenticated %}
-        <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ current_user.username }})</a>
-      {% else %}
-        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-      {% endif %}
-      <a class="nav-link" href="#features">Features</a>
-      <a class="nav-link" href="#why">Why Lippie</a>
-      <a class="nav-link" href="#reviews">Reviews</a>
-      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-link" href="/">Home</a>
+      <a class="nav-link" href="/#features">Features</a>
+      <a class="nav-link" href="/#why">Why Lippie</a>
+      <a class="nav-link" href="/#reviews">Reviews</a>
+      <a class="nav-link" href="/#faq">FAQ</a>
       <a class="nav-link" href="/privacy-policy.html">Privacy</a>
       <a class="nav-link" href="/terms.html">Terms</a>
       <a class="nav-link" href="/contact.html">Contact</a>
@@ -166,12 +274,12 @@
   </nav>
 
   <main class="container">
-    <section class="section">
+    <section class="section reveal">
       <h1 class="h1">Privacy Policy</h1>
       <p>Last updated: September 11, 2025</p>
       <p>Lippie AI ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website or use our services.</p>
       <h2>Information We Collect</h2>
-      <p>We may collect personal information such as your email address when you register or use our clip generator. We also collect non-personal data like cookies and usage analytics to improve our services.</p>
+      <p>We may collect personal information such as your email address when you contact us. We also collect non-personal data like cookies and usage analytics to improve our services.</p>
       <h2>How We Use Your Information</h2>
       <p>Your information is used to provide and improve our services, process clip generation requests, and communicate with you. We do not sell your data to third parties.</p>
       <h2>Cookies</h2>
@@ -187,13 +295,218 @@
     </section>
   </main>
 
-  <footer class="container">
-    <p>© 2025 Lippie AI. Join 500k+ creators.</p>
-    <div class="footer-links">
-      <a href="/privacy-policy.html">Privacy Policy</a> |
-      <a href="/terms.html">Terms of Service</a> |
-      <a href="/contact.html">Contact</a>
+  <footer class="reveal">
+    <div class="footer-container">
+      <span>© 2025 Lippie AI.</span> Join 1.5M+ creators worldwide.
+      <div class="footer-links">
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms.html">Terms of Service</a> |
+        <a href="/contact.html">Contact</a>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // Ensure scripts run after DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // WebGL particle background
+      const canvas = document.getElementById('bgCanvas');
+      if (canvas) {
+        try {
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (!gl) {
+            console.warn('WebGL not supported; hiding canvas.');
+            canvas.style.display = 'none';
+            return;
+          }
+
+          // Resize canvas to fit window
+          function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+          }
+          window.addEventListener('resize', resize);
+          resize();
+
+          // Vertex and fragment shaders
+          const vsSource = `
+            attribute vec2 a_position;
+            attribute float a_index;
+            uniform vec2 u_mouse;
+            uniform float u_time;
+            void main() {
+              vec2 pos = a_position;
+              vec2 dist = u_mouse - pos;
+              float len = length(dist);
+              pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
+              float scale = 0.8 + 0.4 * sin(u_time + a_index);
+              gl_Position = vec4(pos * scale, 0.0, 1.0);
+              gl_PointSize = 3.0 * scale;
+            }
+          `;
+          const fsSource = `
+            precision mediump float;
+            uniform float u_time;
+            void main() {
+              float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
+              vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
+              gl_FragColor = vec4(color, 0.8);
+            }
+          `;
+
+          // Create and compile shaders
+          function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+              console.warn('Shader compilation failed:', gl.getShaderInfoLog(shader));
+              gl.deleteShader(shader);
+              return null;
+            }
+            return shader;
+          }
+
+          const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+          const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+          if (!vertexShader || !fragmentShader) {
+            console.warn('Shader creation failed; hiding canvas.');
+            canvas.style.display = 'none';
+            return;
+          }
+
+          // Create and link program
+          const program = gl.createProgram();
+          gl.attachShader(program, vertexShader);
+          gl.attachShader(program, fragmentShader);
+          gl.linkProgram(program);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.warn('Program linking failed:', gl.getProgramInfoLog(program));
+            canvas.style.display = 'none';
+            return;
+          }
+          gl.useProgram(program);
+
+          // Set up buffers
+          const positionBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+          const positions = new Float32Array(2000);
+          const indices = new Float32Array(1000);
+          for (let i = 0; i < 2000; i += 2) {
+            positions[i] = Math.random() * 2 - 1;
+            positions[i + 1] = Math.random() * 2 - 1;
+            indices[i / 2] = i / 2;
+          }
+          gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+          const positionLocation = gl.getAttribLocation(program, 'a_position');
+          gl.enableVertexAttribArray(positionLocation);
+          gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+          const indexBuffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
+          gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+          const indexLocation = gl.getAttribLocation(program, 'a_index');
+          gl.enableVertexAttribArray(indexLocation);
+          gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
+
+          // Uniforms
+          const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+          const timeLocation = gl.getUniformLocation(program, 'u_time');
+          let mouseX = 0, mouseY = 0;
+          document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+          });
+
+          // Render loop
+          function render() {
+            gl.uniform2f(mouseLocation, mouseX, mouseY);
+            gl.uniform1f(timeLocation, performance.now() / 1000);
+            gl.clearColor(0.016, 0.063, 0.133, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.drawArrays(gl.POINTS, 0, 1000);
+            requestAnimationFrame(render);
+          }
+          render();
+        } catch (err) {
+          console.warn('WebGL initialization failed:', err.message);
+          canvas.style.display = 'none';
+        }
+      } else {
+        console.warn('Canvas element not found.');
+      }
+
+      // Custom cursor
+      if (typeof gsap !== 'undefined') {
+        const cursor = document.querySelector('.cursor');
+        if (cursor) {
+          gsap.set(cursor, { opacity: 1, visibility: 'visible' });
+          document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
+          });
+          document.querySelectorAll('a').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+          });
+        } else {
+          console.warn('Cursor element not found.');
+        }
+      } else {
+        console.warn('GSAP not loaded; custom cursor disabled.');
+      }
+
+      // GSAP animations
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        const reveals = document.querySelectorAll('.reveal');
+        if (reveals.length) {
+          reveals.forEach(el => {
+            gsap.fromTo(el, 
+              { opacity: 0, y: 10, rotateX: 10, rotateY: 10 },
+              { 
+                opacity: 1, 
+                y: 0, 
+                rotateX: 0, 
+                rotateY: 0, 
+                duration: 0.6, 
+                ease: 'power2.out',
+                scrollTrigger: { 
+                  trigger: el, 
+                  start: 'top 80%', 
+                  end: 'bottom 20%', 
+                  toggleActions: 'restart none restart none' 
+                }
+              }
+            );
+          });
+        } else {
+          console.warn('No .reveal elements found for GSAP animation.');
+        }
+
+        const footer = document.querySelector('footer');
+        if (footer) {
+          gsap.fromTo(footer, 
+            { opacity: 0, y: 20 },
+            { 
+              opacity: 1, 
+              y: 0, 
+              duration: 1.2,
+              ease: 'power2.out',
+              scrollTrigger: { 
+                trigger: footer, 
+                start: 'top 95%', 
+                toggleActions: 'play none none none' 
+              }
+            }
+          );
+        } else {
+          console.warn('Footer element not found for GSAP animation.');
+        }
+      } else {
+        console.warn('GSAP or ScrollTrigger not loaded; animations disabled.');
+      }
+    });
+  </script>
 </body>
 </html>
