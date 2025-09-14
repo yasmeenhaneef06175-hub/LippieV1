@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Lippie AI - {% block title %}{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    :root {
+      --bg: #021018;
+      --panel: #071427;
+      --muted: #9aa3b2;
+      --cyan: #00f0ff;
+      --cyan-dark: #00b7eb;
+      --cyan-light: #00d4ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+      --container: 1100px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      color: #fff;
+      background: linear-gradient(180deg, #021018, #071627);
+      overflow-x: hidden;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -40;
+      width: 100%;
+      height: 100%;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -30;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
+      mix-blend-mode: normal;
+      transition: opacity 0.4s linear;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, var(--cyan) 20%, transparent 80%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 1;
+      display: block;
+      visibility: visible;
+      transform: translate(-50%, -50%);
+      animation: pulseCursor 1.5s infinite;
+    }
+
+    .cursor.hovered {
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .cursor.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @keyframes pulseCursor {
+      0% { transform: translate(-50%, -50%) scale(0.8); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+      100% { transform: translate(-50%, -50%) scale(0.8); }
+    }
+
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 60;
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav a:hover {
+      background: var(--cyan);
+      color: var(--panel);
+    }
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .hero {
+      padding-top: 84px;
+      padding-bottom: 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      color: var(--panel);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 36px;
+      line-height: 1.02;
+      margin: 14px 0 8px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 0 0 16px;
+      max-width: 56ch;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--cyan-dark);
+      font-size: 1rem;
+      background: transparent;
+      color: #fff;
+      outline: none;
+      transition: transform 0.3s, border-color 0.3s;
+      margin-bottom: 15px;
+      pointer-events: auto;
+      cursor: text;
+    }
+
+    input::placeholder {
+      color: var(--muted);
+    }
+
+    input:focus {
+      border-color: var(--cyan);
+      transform: scale(1.02);
+    }
+
+    button {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      border: none;
+      cursor: pointer !important;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(0,183,235,0.3);
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: var(--glass);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .status.error {
+      background: rgba(255,75,75,0.2);
+      color: #ff4b4b;
+      border: 1px solid rgba(255,75,75,0.3);
+    }
+
+    .status.success {
+      background: rgba(0,183,235,0.2);
+      color: var(--cyan);
+      border: 1px solid rgba(0,183,235,0.3);
+    }
+
+    footer {
+      padding: 80px 0;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-top: 1px solid var(--glass);
+      box-shadow: 0 -8px 28px rgba(0,0,0,0.45);
+      z-index: 10;
+      width: 100%;
+    }
+
+    .footer-container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 120px;
+    }
+
+    .footer-container span {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (max-width: 980px) {
+      .h1 {
+        font-size: 22px;
+      }
+      .footer-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+      #bgCanvas {
+        display: none;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .cursor {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <div class="cursor"></div>
+
+  <nav class="nav">
+    <div class="nav-inner container">
+      <div class="logo">Lippie AI</div>
+      <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+      {% if current_user.is_authenticated %}
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ current_user.username }})</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero reveal">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="status {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+
+  <footer class="reveal">
+    <div class="footer-container">
+      <span>© 2025 Lippie AI.</span> Join 1.5M+ creators worldwide.
+    </div>
+  </footer>
+
+  <script>
+    try {
+      const canvas = document.getElementById('bgCanvas');
+      const gl = canvas.getContext('webgl');
+      if (!gl) throw new Error('WebGL not supported');
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      const vsSource = `
+        precision mediump float;
+        attribute vec2 a_position;
+        attribute float a_index;
+        uniform vec2 u_mouse;
+        uniform float u_time;
+        void main() {
+          vec2 pos = a_position;
+          vec2 dist = u_mouse - pos;
+          float len = length(dist);
+          pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
+          float scale = 0.8 + 0.4 * sin(u_time + a_index);
+          gl_Position = vec4(pos * scale, 0.0, 1.0);
+          gl_PointSize = 3.0 * scale;
+        }
+      `;
+      const fsSource = `
+        precision mediump float;
+        uniform float u_time;
+        void main() {
+          float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
+          vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
+          gl_FragColor = vec4(color, 0.8);
+        }
+      `;
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          console.error(gl.getShaderInfoLog(shader));
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+      const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+      const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error(gl.getProgramInfoLog(program));
+      }
+      gl.useProgram(program);
+      const positionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      const positions = new Float32Array(2000);
+      const indices = new Float32Array(1000);
+      for (let i = 0; i < 2000; i += 2) {
+        positions[i] = Math.random() * 2 - 1;
+        positions[i + 1] = Math.random() * 2 - 1;
+        indices[i / 2] = i / 2;
+      }
+      gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+      const positionLocation = gl.getAttribLocation(program, 'a_position');
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+      const indexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+      const indexLocation = gl.getAttribLocation(program, 'a_index');
+      gl.enableVertexAttribArray(indexLocation);
+      gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
+      const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+      const timeLocation = gl.getUniformLocation(program, 'u_time');
+      let mouseX = 0, mouseY = 0;
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+      });
+      function render() {
+        gl.uniform2f(mouseLocation, mouseX, mouseY);
+        gl.uniform1f(timeLocation, performance.now() / 1000);
+        gl.clearColor(0.016, 0.063, 0.133, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.POINTS, 0, 1000);
+        requestAnimationFrame(render);
+      }
+      render();
+    } catch (err) {
+      console.warn('WebGL failed:', err.message);
+    }
+
+    try {
+      const cursor = document.querySelector('.cursor');
+      gsap.set(cursor, { opacity: 1, visibility: 'visible' });
+      document.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
+      });
+      document.querySelectorAll('a, button, input').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+      });
+    } catch (err) {
+      console.warn('Cursor failed:', err.message);
+    }
+
+    try {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('.reveal').forEach(el => {
+        gsap.fromTo(el, 
+          { opacity: 0, y: 10, rotateX: 10, rotateY: 10 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            rotateX: 0, 
+            rotateY: 0, 
+            duration: 0.6, 
+            ease: 'power2.out',
+            scrollTrigger: { 
+              trigger: el, 
+              start: 'top 80%', 
+              end: 'bottom 20%', 
+              toggleActions: 'restart none restart none' 
+            }
+          }
+        );
+      });
+      gsap.fromTo('footer', 
+        { opacity: 0, y: 20 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 1.2,
+          ease: 'power2.out',
+          scrollTrigger: { 
+            trigger: 'footer', 
+            start: 'top 95%', 
+            toggleActions: 'play none none none' 
+          }
+        }
+      );
+    } catch (err) {
+      console.warn('GSAP failed:', err.message);
+    }
+  </script>
+</body>
+</html>

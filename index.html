@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="Lippie AI generates short, engaging video clips with subtitles from YouTube videos. Create viral content for TikTok, Instagram, and YouTube Shorts.">
+  <meta name="keywords" content="AI video clips, YouTube clip generator, viral content creator, video editing AI, Lippie AI">
+  <meta name="google-adsense-account" content="ca-pub-XXXXXXXXXXXXXXXX">
+  <meta property="og:title" content="Lippie AI - AI-Powered Clip Generator">
+  <meta property="og:description" content="Transform YouTube videos into short, shareable clips with AI-generated subtitles using Lippie AI. Perfect for social media creators.">
+  <meta property="og:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
+  <meta property="og:url" content="https://lippie-ai.onrender.com">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lippie AI - AI-Powered Clip Generator">
+  <meta name="twitter:description" content="Transform YouTube videos into short, shareable clips with AI-generated subtitles using Lippie AI.">
+  <meta name="twitter:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
+  <link rel="icon" type="image/png" href="/static/images/favicon.png">
+  <title>Lippie AI - Clip Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Lippie AI",
+    "url": "https://lippie-ai.onrender.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://lippie-ai.onrender.com/?s={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Lippie AI",
+    "url": "https://lippie-ai.onrender.com",
+    "logo": "https://lippie-ai.onrender.com/static/images/logo.png"
+  }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    :root {
+      --bg: #021018;
+      --panel: #071427;
+      --muted: #9aa3b2;
+      --cyan: #00f0ff;
+      --cyan-dark: #00b7eb;
+      --cyan-light: #00d4ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+      --container: 1100px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      color: #fff;
+      background: linear-gradient(180deg, #021018, #071627);
+      overflow-x: hidden;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -40;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -30;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
+    }
+
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 60;
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav a:hover {
+      background: var(--cyan);
+      color: var(--panel);
+    }
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .hero {
+      padding-top: 84px;
+      padding-bottom: 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      color: var(--panel);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 36px;
+      line-height: 1.02;
+      margin: 14px 0 8px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lead {
+      color: var(--muted);
+      margin: 0 0 16px;
+      max-width: 56ch;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+    }
+
+    .input-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 10px;
+      padding: 40px;
+      margin: 50px auto;
+      max-width: 600px;
+      border: 1px solid var(--glass);
+      box-shadow: 0 0 10px rgba(0,183,235,0.3);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--cyan-dark);
+      background: transparent;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--muted);
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--cyan);
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: var(--glass);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .error {
+      background: rgba(255, 0, 0, 0.15);
+      color: #ff6b6b;
+    }
+
+    .clip-card {
+      background: var(--glass);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid var(--glass);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 10px rgba(0,183,235,0.3);
+      transition: transform 0.3s;
+    }
+
+    .clip-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .clip-card video {
+      width: 100%;
+      max-width: 270px;
+      max-height: 480px;
+      aspect-ratio: 9/16;
+      border-radius: 6px;
+      loading: lazy;
+    }
+
+    .clip-card a.btn {
+      margin-top: 12px;
+      width: auto;
+    }
+
+    .feature-slider, .test-slider, .faq-slider {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 10px;
+      border: 1px solid var(--glass);
+      min-height: 60px;
+    }
+
+    .feature-card, .test-slide {
+      min-width: 100%;
+      width: calc(100% - 40px);
+      position: absolute;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #features .feature-card:nth-child(1),
+    #why .feature-card:nth-child(1),
+    #reviews .test-slide:nth-child(1) {
+      opacity: 1;
+      transform: scale(1);
+      position: relative;
+    }
+
+    #features .feature-card {
+      animation: fadeSlideFeatures 12s infinite;
+    }
+
+    #features .feature-card:nth-child(1) { animation-delay: 0s; }
+    #features .feature-card:nth-child(2) { animation-delay: 3s; }
+    #features .feature-card:nth-child(3) { animation-delay: 6s; }
+    #features .feature-card:nth-child(4) { animation-delay: 9s; }
+
+    @keyframes fadeSlideFeatures {
+      0%, 25% { opacity: 1; transform: scale(1); position: relative; }
+      30%, 100% { opacity: 0; transform: scale(0.95); position: absolute; }
+    }
+
+    #why .feature-card,
+    #reviews .test-slide {
+      animation: fadeSlideOthers 9s infinite;
+    }
+
+    #why .feature-card:nth-child(1),
+    #reviews .test-slide:nth-child(1) { animation-delay: 0s; }
+    #why .feature-card:nth-child(2),
+    #reviews .test-slide:nth-child(2) { animation-delay: 3s; }
+    #why .feature-card:nth-child(3),
+    #reviews .test-slide:nth-child(3) { animation-delay: 6s; }
+
+    @keyframes fadeSlideOthers {
+      0%, 33.33% { opacity: 1; transform: scale(1); position: relative; }
+      38.33%, 100% { opacity: 0; transform: scale(0.95); position: absolute; }
+    }
+
+    .feature-card p, .faq-slide h3 {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--cyan);
+      animation: pulseText 1.5s infinite ease-in-out;
+    }
+
+    .test-slide {
+      display: flex;
+      align-items: center;
+      text-align: left;
+    }
+
+    .test-slide .avatar {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      background: var(--cyan);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--panel);
+      font-size: 12px;
+      font-weight: 700;
+      animation: pulseAvatar 1.5s infinite ease-in-out;
+    }
+
+    .test-slide p {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--cyan);
+      animation: pulseText 1.5s infinite ease-in-out;
+    }
+
+    .test-slide .user-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--cyan-light);
+    }
+
+    @keyframes pulseAvatar {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes pulseText {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    .section-title, .feature-card, .test-slide, .input-card, .clip-card {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: reveal 0.8s ease-out forwards;
+    }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #features .section-title { animation-delay: 0s; }
+    #features .feature-card { animation-delay: 0.2s; }
+    #why .section-title { animation-delay: 0s; }
+    #why .feature-card { animation-delay: 0.2s; }
+    #reviews .section-title { animation-delay: 0s; }
+    #reviews .test-slide { animation-delay: 0.2s; }
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 16, 24, 0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .loading-animation {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .loading-circle {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 4px solid transparent;
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin 1.5s ease-in-out infinite;
+    }
+
+    .loading-circle:nth-child(2) {
+      border-top-color: var(--cyan-light);
+      animation-delay: 0.3s;
+    }
+
+    .loading-circle:nth-child(3) {
+      border-top-color: var(--cyan-dark);
+      animation-delay: 0.6s;
+    }
+
+    .loading-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--cyan);
+      animation: pulseText 1.5s infinite ease-in-out;
+    }
+
+    .error-message {
+      display: none;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ff6b6b;
+      background: rgba(255, 0, 0, 0.15);
+      padding: 15px 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 980px) {
+      .h1 { font-size: 22px; }
+      .clip-card video { max-width: 200px; max-height: 355px; }
+      .loading-text, .error-message { font-size: 16px; }
+    }
+
+    .flash-message {
+      margin: 20px auto;
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 600px;
+    }
+
+    .flash-message.success {
+      background: rgba(0, 255, 0, 0.15);
+      color: #0f0;
+    }
+
+    .flash-message.error {
+      background: rgba(255, 0, 0, 0.15);
+      color: #ff6b6b;
+    }
+
+    .footer-links {
+      margin-top: 10px;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0 8px;
+      font-size: 14px;
+    }
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="bg-overlay"></div>
+
+  <nav class="nav">
+    <div class="nav-inner container">
+      <div class="logo">Lippie AI</div>
+      <a class="nav-link" href="/">Home</a>
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#why">Why Lippie</a>
+      <a class="nav-link" href="#reviews">Reviews</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-link" href="#cta">Get Started</a>
+      <a class="nav-link" href="/privacy-policy.html">Privacy</a>
+      <a class="nav-link" href="/terms.html">Terms</a>
+      <a class="nav-link" href="/contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section id="hero" class="hero">
+      <span class="kicker">AI-POWERED CLIPS</span>
+      <h1 class="h1">Lippie Clip Generator</h1>
+      <p class="lead">Enter a YouTube URL to generate short clips with subtitles!</p>
+      <div class="input-card">
+        <form id="clip-form">
+          <div class="form-group">
+            <input type="text" id="youtube-url" placeholder="Enter YouTube URL (e.g., https://youtube.com/watch?v=...)" required aria-label="YouTube URL input">
+            <button type="submit" class="btn btn-primary" id="generate-btn" aria-label="Generate video clips">Generate Clips</button>
+          </div>
+        </form>
+        <div class="status" id="status">Status: Ready to create your clips...</div>
+        <div class="loading-overlay" id="loading-overlay">
+          <div class="loading-animation">
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+            <div class="loading-circle"></div>
+          </div>
+          <div class="loading-text">Generating your clips...</div>
+          <div class="error-message" id="error-message">Oops! Too many people generating. Please try again later.</div>
+        </div>
+      </div>
+      <div id="results" class="section" style="display: none;">
+        <h3 class="section-title">Generated Clips</h3>
+        <div id="clips-container" class="feature-slider"></div>
+        <div class="cta-row">
+          <a href="/" class="btn btn-primary">Generate More</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <h3 class="section-title">What You Get</h3>
+      <div class="feature-slider">
+        <div class="feature-card">
+          <p><strong>Instant Shorts from Any Video</strong></p>
+        </div>
+        <div class="feature-card">
+          <p><strong>High-Energy Detection</strong></p>
+        </div>
+        <div class="feature-card">
+          <p><strong>Instant Previews</strong></p>
+        </div>
+        <div class="feature-card">
+          <p><strong>One-Click Downloads</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="why" class="section">
+      <h3 class="section-title">Why Choose Lippie?</h3>
+      <div class="feature-slider">
+        <div class="feature-card">
+          <p><strong>High Quality Shorts</strong></p>
+        </div>
+        <div class="feature-card">
+          <p><strong>Viral Content</strong></p>
+        </div>
+        <div class="feature-card">
+          <p><strong>AI Subtitles</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section">
+      <h3 class="section-title">What Creators Say</h3>
+      <div class="test-slider">
+        <div class="test-slide">
+          <span class="avatar" data-name="Alex Harper">A</span>
+          <p>"Perfect clips, no editing needed!" – <span class="user-name">Alex Harper</span></p>
+        </div>
+        <div class="test-slide">
+          <span class="avatar" data-name="Maya Lee">M</span>
+          <p>"Subtitles are spot-on!" – <span class="user-name">Maya Lee</span></p>
+        </div>
+        <div class="test-slide">
+          <span class="avatar" data-name="Sam Patel">S</span>
+          <p>"Saves me hours!" – <span class="user-name">Sam Patel</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <h3 class="section-title">Frequently Asked Questions</h3>
+      <div class="faq-slider">
+        <div class="faq-slide">
+          <h3>What videos can Lippie process?</h3>
+          <p>Any YouTube video, including podcasts and interviews.</p>
+        </div>
+        <div class="faq-slide">
+          <h3>How are subtitles generated?</h3>
+          <p>AI-powered transcription for accurate subtitles.</p>
+        </div>
+        <div class="faq-slide">
+          <h3>Can I share clips directly?</h3>
+          <p>Yes, optimized for TikTok, Instagram, and YouTube Shorts.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" class="section">
+      <h3 class="section-title">Create Viral Clips</h3>
+      <div class="cta-row">
+        <a href="#hero" class="btn btn-primary">Start Now</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <p>© 2025 Lippie AI. Join 500k+ creators.</p>
+    <div class="footer-links">
+      <a href="/privacy-policy.html">Privacy Policy</a> |
+      <a href="/terms.html">Terms of Service</a> |
+      <a href="/contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Looping particle background
+    try {
+      const canvas = document.getElementById('bgCanvas');
+      if (!canvas) throw new Error('Canvas element not found');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      const geometry = new THREE.BufferGeometry();
+      const vertices = [];
+      for (let i = 0; i < 10000; i++) {
+        vertices.push(
+          Math.random() * 2000 - 1000,
+          Math.random() * 2000 - 1000,
+          Math.random() * 2000 - 1000
+        );
+      }
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      const material = new THREE.PointsMaterial({ color: 0x00f0ff, size: 2, transparent: true, opacity: 0.3 });
+      const points = new THREE.Points(geometry, material);
+      scene.add(points);
+      camera.position.z = 1000;
+      function animate() {
+        requestAnimationFrame(animate);
+        points.rotation.y += 0.0005;
+        renderer.render(scene, camera);
+      }
+      animate();
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    } catch (err) {
+      console.warn('Three.js particle background failed:', err.message);
+    }
+
+    // Form submission logic with loading animation and error message
+    try {
+      document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('clip-form');
+        const youtubeUrlInput = document.getElementById('youtube-url');
+        const status = document.getElementById('status');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const errorMessage = document.getElementById('error-message');
+        const results = document.getElementById('results');
+
+        if (!form || !youtubeUrlInput || !status || !loadingOverlay || !errorMessage || !results) {
+          console.warn('Form elements not found');
+          return;
+        }
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const url = youtubeUrlInput.value.trim();
+          if (!url) {
+            status.classList.add('error');
+            status.textContent = 'Error: Please paste a YouTube URL';
+            youtubeUrlInput.focus();
+            return;
+          }
+          if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+            status.classList.add('error');
+            status.textContent = 'Error: Please enter a valid YouTube URL';
+            youtubeUrlInput.focus();
+            return;
+          }
+          status.textContent = 'Starting clip generation...';
+          status.classList.remove('error');
+          loadingOverlay.style.display = 'flex';
+          results.style.display = 'none';
+
+          // Simulate random delay between 3-8 seconds
+          const randomDelay = Math.floor(Math.random() * (8000 - 3000 + 1)) + 3000;
+          await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+          // Show error message and hide loading animation
+          loadingOverlay.querySelector('.loading-animation').style.display = 'none';
+          loadingOverlay.querySelector('.loading-text').style.display = 'none';
+          errorMessage.style.display = 'block';
+
+          // Hide overlay and reset form after 3 seconds
+          setTimeout(() => {
+            loadingOverlay.style.display = 'none';
+            errorMessage.style.display = 'none';
+            loadingOverlay.querySelector('.loading-animation').style.display = 'block';
+            loadingOverlay.querySelector('.loading-text').style.display = 'block';
+            status.textContent = 'Status: Ready to create your clips...';
+            youtubeUrlInput.value = '';
+          }, 3000);
+        });
+      });
+    } catch (err) {
+      console.warn('Form submission setup failed:', err.message);
+    }
+  </script>
+</body>
+</html>

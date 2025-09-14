@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="Lippie AI Terms of Service outline the rules and guidelines for using our AI-powered clip generator.">
+  <meta name="keywords" content="Lippie AI, terms of service, AI clip generator, user agreement">
+  <meta property="og:title" content="Lippie AI - Terms of Service">
+  <meta property="og:description" content="Read the terms governing the use of Lippie AI's clip generation services.">
+  <meta property="og:image" content="https://yoursite.com/images/og-image.jpg">
+  <meta property="og:url" content="https://yoursite.com/terms.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lippie AI - Terms of Service">
+  <meta name="twitter:description" content="Read the terms governing the use of Lippie AI's clip generation services.">
+  <meta name="twitter:image" content="https://yoursite.com/images/og-image.jpg">
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <title>Lippie AI - Terms of Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"></script>
+  <style>
+    :root {
+      --bg: #021018;
+      --panel: #071427;
+      --muted: #9aa3b2;
+      --cyan: #00f0ff;
+      --cyan-dark: #00b7eb;
+      --cyan-light: #00d4ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 12px;
+      --container: 1100px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      color: #fff;
+      background: linear-gradient(180deg, #021018, #071627);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 60;
+      display: flex;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav a:hover {
+      background: var(--cyan);
+      color: var(--panel);
+    }
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 36px;
+      line-height: 1.02;
+      margin: 14px 0 8px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 10px 0;
+    }
+
+    .footer-links {
+      margin-top: 10px;
+    }
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0 8px;
+      font-size: 14px;
+    }
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+
+    @media (max-width: 980px) {
+      .h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner container">
+      <div class="logo">Lippie AI</div>
+      <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+      {% if current_user.is_authenticated %}
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ current_user.username }})</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#why">Why Lippie</a>
+      <a class="nav-link" href="#reviews">Reviews</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+      <a class="nav-link" href="/privacy-policy.html">Privacy</a>
+      <a class="nav-link" href="/terms.html">Terms</a>
+      <a class="nav-link" href="/contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="section">
+      <h1 class="h1">Terms of Service</h1>
+      <p>Last updated: September 11, 2025</p>
+      <p>By using Lippie AI ("Service"), you agree to these Terms of Service. If you do not agree, please do not use our Service.</p>
+      <h2>Use of Service</h2>
+      <p>You must be 18 or older to use Lippie AI. You agree not to upload illegal or copyrighted content without permission.</p>
+      <h2>Content Ownership</h2>
+      <p>You retain ownership of clips generated but grant Lippie AI a non-exclusive license to process and store them temporarily.</p>
+      <h2>Prohibited Actions</h2>
+      <p>Do not misuse our Service, including submitting malicious URLs or attempting to harm our systems.</p>
+      <h2>Limitation of Liability</h2>
+      <p>Lippie AI is not liable for damages arising from Service use. We provide no warranties beyond what is legally required.</p>
+      <h2>Changes to Terms</h2>
+      <p>We may update these Terms. Check this page for the latest version.</p>
+      <h2>Contact Us</h2>
+      <p>For questions, email us at <a href="mailto:sufiyanuu06175@gmail.com">sufiyanuu06175@gmail.com</a>.</p>
+    </section>
+  </main>
+
+  <footer class="container">
+    <p>© 2025 Lippie AI. Join 500k+ creators.</p>
+    <div class="footer-links">
+      <a href="/privacy-policy.html">Privacy Policy</a> |
+      <a href="/terms.html">Terms of Service</a> |
+      <a href="/contact.html">Contact</a>
+    </div>
+  </footer>
+</body>
+</html>
