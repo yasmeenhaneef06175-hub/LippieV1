@@ -8,13 +8,13 @@
   <meta name="google-adsense-account" content="ca-pub-5278017339767767">
   <meta property="og:title" content="Lippie AI - AI-Powered Clip Generator">
   <meta property="og:description" content="Transform YouTube videos into short, shareable clips with AI-generated subtitles using Lippie AI. Perfect for social media creators.">
-  <meta property="og:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
-  <meta property="og:url" content="https://lippie-ai.onrender.com">
+  <meta property="og:image" content="https://lippieai.netlify.app/static/images/og-image.jpg">
+  <meta property="og:url" content="https://lippieai.netlify.app">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lippie AI - AI-Powered Clip Generator">
   <meta name="twitter:description" content="Transform YouTube videos into short, shareable clips with AI-generated subtitles using Lippie AI.">
-  <meta name="twitter:image" content="https://lippie-ai.onrender.com/static/images/og-image.jpg">
+  <meta name="twitter:image" content="https://lippieai.netlify.app/static/images/og-image.jpg">
   <link rel="icon" type="image/png" href="/static/images/favicon.png">
   <title>Lippie AI - Clip Generator</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -700,7 +700,7 @@
             <div class="loading-circle"></div>
           </div>
           <div class="loading-text">Generating your clips...</div>
-          <div class="error-message" id="error-message">Oops! Too many people generating. Please try again later.</div>
+          <div class="error-message" id="error-message"></div>
         </div>
       </div>
       <div id="results" class="section" style="display: none;">
@@ -1048,15 +1048,16 @@
         console.warn('GSAP animations initialization failed:', err.message);
       }
 
-      // Form submission logic with enhanced loading animation
+      // Form submission logic with API integration
       const generateBtn = document.getElementById('generate-btn');
       const youtubeUrlInput = document.getElementById('youtube-url');
       const status = document.getElementById('status');
       const loadingOverlay = document.getElementById('loading-overlay');
       const errorMessage = document.getElementById('error-message');
       const results = document.getElementById('results');
+      const clipsContainer = document.getElementById('clips-container');
 
-      if (generateBtn && youtubeUrlInput && status && loadingOverlay && errorMessage && results) {
+      if (generateBtn && youtubeUrlInput && status && loadingOverlay && errorMessage && results && clipsContainer) {
         generateBtn.addEventListener('click', async () => {
           const url = youtubeUrlInput.value.trim();
 
@@ -1082,26 +1083,62 @@
           loadingOverlay.querySelector('.loading-text').style.display = 'block';
           errorMessage.style.display = 'none';
           results.style.display = 'none';
+          clipsContainer.innerHTML = ''; // Clear previous clips
 
-          // Simulate processing with random delay (3-8 seconds)
-          const randomDelay = Math.floor(Math.random() * (8000 - 3000 + 1)) + 3000;
-          await new Promise(resolve => setTimeout(resolve, randomDelay));
+          try {
+            // Send POST request to Replit API
+            const response = await fetch('https://yt-shorts-api.yourusername.repl.co/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url: url })
+            });
 
-          // Hide loading animation and show error message
-          loadingOverlay.querySelector('.loading-animation').style.display = 'none';
-          loadingOverlay.querySelector('.loading-text').style.display = 'none';
-          errorMessage.style.display = 'block';
+            const data = await response.json();
 
-          // Reset after 3 seconds
-          setTimeout(() => {
+            if (!response.ok) {
+              throw new Error(data.message || 'Failed to generate clips');
+            }
+
+            // Hide loading animation
             loadingOverlay.style.display = 'none';
-            errorMessage.style.display = 'none';
-            loadingOverlay.querySelector('.loading-animation').style.display = 'block';
-            loadingOverlay.querySelector('.loading-text').style.display = 'block';
-            status.textContent = 'Status: Ready to create your clips...';
-            youtubeUrlInput.value = '';
-            youtubeUrlInput.focus();
-          }, 3000);
+            status.textContent = 'Clips generated successfully!';
+
+            // Display clips
+            results.style.display = 'block';
+            data.clips.forEach((clip, index) => {
+              const clipCard = document.createElement('div');
+              clipCard.className = 'clip-card';
+              clipCard.innerHTML = `
+                <video controls>
+                  <source src="https://yt-shorts-api.yourusername.repl.co${clip.download_url}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+                <a href="https://yt-shorts-api.yourusername.repl.co${clip.download_url}" class="btn btn-primary" download="clip_${index + 1}.mp4">Download Clip ${index + 1}</a>
+              `;
+              clipsContainer.appendChild(clipCard);
+            });
+
+            // Scroll to results
+            results.scrollIntoView({ behavior: 'smooth' });
+
+          } catch (error) {
+            // Show error message
+            loadingOverlay.querySelector('.loading-animation').style.display = 'none';
+            loadingOverlay.querySelector('.loading-text').style.display = 'none';
+            errorMessage.textContent = `Error: ${error.message}`;
+            errorMessage.style.display = 'block';
+
+            // Reset after 5 seconds
+            setTimeout(() => {
+              loadingOverlay.style.display = 'none';
+              errorMessage.style.display = 'none';
+              loadingOverlay.querySelector('.loading-animation').style.display = 'block';
+              loadingOverlay.querySelector('.loading-text').style.display = 'block';
+              status.textContent = 'Status: Ready to create your clips...';
+              youtubeUrlInput.value = '';
+              youtubeUrlInput.focus();
+            }, 5000);
+          }
         });
       } else {
         console.warn('Form elements not found:', {
@@ -1110,7 +1147,8 @@
           status: !!status,
           loadingOverlay: !!loadingOverlay,
           errorMessage: !!errorMessage,
-          results: !!results
+          results: !!results,
+          clipsContainer: !!clipsContainer
         });
       }
 
