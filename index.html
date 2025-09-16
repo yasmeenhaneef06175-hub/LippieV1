@@ -1087,7 +1087,7 @@
 
           try {
             // Send POST request to Replit API
-            const response = await fetch('https://yt-shorts-api.yourusername.repl.co/generate', {
+            const response = await fetch('https://lippie-backend-yasmeenhaneef06.replit.app/generate', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ url: url })
@@ -1110,10 +1110,10 @@
               clipCard.className = 'clip-card';
               clipCard.innerHTML = `
                 <video controls>
-                  <source src="https://yt-shorts-api.yourusername.repl.co${clip.download_url}" type="video/mp4">
+                  <source src="https://lippie-backend-yasmeenhaneef06.replit.app${clip.download_url}" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
-                <a href="https://yt-shorts-api.yourusername.repl.co${clip.download_url}" class="btn btn-primary" download="clip_${index + 1}.mp4">Download Clip ${index + 1}</a>
+                <a href="https://lippie-backend-yasmeenhaneef06.replit.app${clip.download_url}" class="btn btn-primary" download="clip_${index + 1}.mp4">Download Clip ${index + 1}</a>
               `;
               clipsContainer.appendChild(clipCard);
             });
