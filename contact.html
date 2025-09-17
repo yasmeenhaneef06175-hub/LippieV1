@@ -200,10 +200,16 @@
       backdrop-filter: blur(10px);
     }
 
-    input[type="text"], textarea {
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input[type="text"], input[type="email"], textarea {
       width: 100%;
       padding: 12px;
-      margin: 12px 0;
+      margin: 8px 0;
       border: 1px solid var(--glass);
       background: rgba(255,255,255,0.05);
       color: #fff;
@@ -218,11 +224,11 @@
       resize: vertical;
     }
 
-    input[type="text"]:focus, textarea:focus {
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
       border-color: var(--cyan);
     }
 
-    button {
+    .btn {
       background: linear-gradient(90deg, var(--cyan), var(--cyan-dark));
       color: var(--panel);
       padding: 12px 24px;
@@ -234,9 +240,27 @@
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    button:hover {
+    .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0,240,255,0.3);
+    }
+
+    .flash-message {
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .flash-message.success {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--cyan);
+    }
+
+    .flash-message.error {
+      background: rgba(255, 0, 0, 0.1);
+      color: #ff4d4d;
     }
 
     footer {
@@ -322,7 +346,7 @@
       .h1 { font-size: 20px; }
       p { font-size: 12px; }
       .nav a { font-size: 13px; }
-      button { padding: 10px 20px; }
+      .btn { padding: 10px 20px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -369,10 +393,13 @@
       <h1 class="h1">Contact Us</h1>
       <p>Have questions or feedback? Reach out to our team, and we’ll get back to you soon.</p>
       <div class="form-container">
-        <input type="text" id="name" placeholder="Your Name" aria-label="Your Name">
-        <input type="text" id="email" placeholder="Your Email" aria-label="Your Email">
-        <textarea id="message" placeholder="Your Message" aria-label="Your Message"></textarea>
-        <button onclick="submitContact()">Send Message</button>
+        <div id="flash-messages"></div>
+        <form id="contact-form" class="form-group" action="https://lippie-backend-yasmeenhaneef06.replit.app/contact">
+          <input type="text" id="name" name="name" placeholder="Your Name" required aria-label="Your Name">
+          <input type="email" id="email" name="email" placeholder="Your Email" required aria-label="Your Email">
+          <textarea id="message" name="message" placeholder="Your Message" rows="5" required aria-label="Your Message"></textarea>
+          <button type="submit" class="btn" aria-label="Submit Contact Form">Send Message</button>
+        </form>
       </div>
     </section>
   </main>
@@ -629,33 +656,51 @@
       }
 
       // Form submission
-      window.submitContact = async function() {
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const message = document.getElementById('message').value.trim();
-        if (!name || !email || !message) {
-          alert('Please fill out all fields.');
-          return;
-        }
-        try {
-          const response = await fetch('https://lippie-backend-yasmeenhaneef06.replit.app/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message })
-          });
-          const data = await response.json();
-          if (response.ok) {
-            alert('Message sent successfully! We’ll get back to you soon.');
-            document.getElementById('name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('message').value = '';
-          } else {
-            alert('Error: ' + (data.error || 'Failed to send message.'));
+      const form = document.getElementById('contact-form');
+      const flashMessages = document.getElementById('flash-messages');
+      if (form && flashMessages) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          flashMessages.innerHTML = '';
+
+          const name = document.getElementById('name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const message = document.getElementById('message').value.trim();
+
+          if (!name || !email || !message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flash-message error';
+            messageDiv.textContent = 'Please fill out all fields.';
+            flashMessages.appendChild(messageDiv);
+            return;
           }
-        } catch (error) {
-          alert('Network error: ' + error.message);
-        }
-      };
+
+          try {
+            const response = await fetch(form.action, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ name, email, message })
+            });
+            const data = await response.json();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flash-message ${response.ok ? 'success' : 'error'}`;
+            messageDiv.textContent = data.message;
+            flashMessages.appendChild(messageDiv);
+            if (response.ok) {
+              form.reset();
+            }
+          } catch (error) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flash-message error';
+            messageDiv.textContent = 'Network error: Failed to send message. Please try again.';
+            flashMessages.appendChild(messageDiv);
+            console.error('Form submission error:', error);
+          }
+        });
+      }
 
       // Initialize navigation
       handleNavigation();
