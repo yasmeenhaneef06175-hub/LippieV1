@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Contact Lippie AI for support or inquiries about our AI-powered clip generator.">
-  <meta name="keywords" content="Lippie AI, contact, AI clip generator, support, video editing AI">
+  <meta name="description" content="Contact Lippie AI for support, feedback, or inquiries about our AI-powered clip generator.">
+  <meta name="keywords" content="Lippie AI, contact, AI clip generator, support">
   <meta name="google-adsense-account" content="ca-pub-5278017339767767">
   <meta property="og:title" content="Lippie AI - Contact Us">
-  <meta property="og:description" content="Get in touch with Lippie AI for help with our video clip generation services.">
+  <meta property="og:description" content="Get in touch with Lippie AI for support or inquiries about our AI-powered clip generator.">
   <meta property="og:image" content="/static/images/og-image.jpg">
   <meta property="og:url" content="https://lippieai.netlify.app/contact.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lippie AI - Contact Us">
-  <meta name="twitter:description" content="Get in touch with Lippie AI for help with our video clip generation services.">
+  <meta name="twitter:description" content="Get in touch with Lippie AI for support or inquiries.">
   <meta name="twitter:image" content="/static/images/og-image.jpg">
   <link rel="icon" type="image/png" href="/static/images/favicon.png">
   <title>Lippie AI - Contact Us</title>
@@ -184,147 +184,59 @@
       font-size: 14px;
       line-height: 1.5;
       margin: 10px 0;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .form-container {
+      background: var(--glass);
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.03);
       max-width: 600px;
-      margin: 20px auto;
+      margin: 24px auto;
+      backdrop-filter: blur(10px);
     }
 
-    input[type="text"], input[type="email"], textarea {
+    input[type="text"], textarea {
       width: 100%;
       padding: 12px;
-      border-radius: 6px;
-      border: 1px solid var(--cyan-dark);
-      background: transparent;
+      margin: 12px 0;
+      border: 1px solid var(--glass);
+      background: rgba(255,255,255,0.05);
       color: #fff;
+      border-radius: 8px;
       font-size: 14px;
       outline: none;
       transition: border-color 0.3s;
     }
 
-    input[type="text"]::placeholder, input[type="email"]::placeholder, textarea::placeholder {
-      color: var(--muted);
+    textarea {
+      min-height: 120px;
+      resize: vertical;
     }
 
-    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+    input[type="text"]:focus, textarea:focus {
       border-color: var(--cyan);
     }
 
-    .btn {
-      padding: 10px 14px;
+    button {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-dark));
+      color: var(--panel);
+      padding: 12px 24px;
+      border: none;
       border-radius: 8px;
-      border: 0;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 14px;
-      color: #fff;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
-      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
-      transition: all 0.3s ease;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
-    .btn:hover {
-      transform: scale(1.02);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.5);
-    }
-
-    .flash-message {
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      font-size: 14px;
-      max-width: 90%;
-    }
-
-    .flash-message.success {
-      background: rgba(0, 255, 0, 0.2);
-      color: #00ff00;
-    }
-
-    .flash-message.error {
-      background: rgba(255, 0, 0, 0.2);
-      color: #ff6b6b;
-    }
-
-    .loading-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(2, 16, 24, 0.95);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-      animation: fadeIn 0.5s ease-in;
-    }
-
-    .loading-animation {
-      width: 80px;
-      height: 80px;
-      position: relative;
-      transform: scale(1);
-      animation: pulseLoader 2s infinite ease-in-out;
-    }
-
-    .loading-circle {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border: 4px solid transparent;
-      border-top-color: var(--cyan);
-      border-radius: 50%;
-      animation: spin 1.2s ease-in-out infinite, glow 1.5s infinite;
-    }
-
-    .loading-circle:nth-child(2) {
-      border-top-color: var(--cyan-light);
-      animation-delay: 0.4s;
-    }
-
-    .loading-circle:nth-child(3) {
-      border-top-color: var(--cyan-dark);
-      animation-delay: 0.8s;
-    }
-
-    .loading-text {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--cyan);
-      text-shadow: 0 0 10px var(--cyan);
-      animation: glowText 1.5s infinite ease-in-out;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 5px var(--cyan); }
-      50% { box-shadow: 0 0 15px var(--cyan); }
-    }
-
-    @keyframes glowText {
-      0%, 100% { text-shadow: 0 0 5px var(--cyan); }
-      50% { text-shadow: 0 0 15px var(--cyan); }
-    }
-
-    @keyframes pulseLoader {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,240,255,0.3);
     }
 
     footer {
@@ -372,6 +284,16 @@
       color: var(--cyan);
     }
 
+    .section, footer {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: reveal 0.8s ease-out forwards;
+    }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 768px) {
       .nav-inner {
         display: none;
@@ -391,23 +313,16 @@
 
       .h1 { font-size: 24px; }
       p { font-size: 13px; }
-      .btn { font-size: 13px; padding: 8px 12px; }
-      .form-group { margin: 16px auto; }
-      .loading-text { font-size: 13px; }
-      .footer-container {
-        flex-direction: column;
-        gap: 6px;
-      }
       .section { padding: 32px 0; }
-      .loading-animation { width: 60px; height: 60px; }
+      .form-container { padding: 16px; }
+      .footer-container { flex-direction: column; gap: 6px; }
     }
 
     @media (max-width: 480px) {
       .h1 { font-size: 20px; }
       p { font-size: 12px; }
-      .btn { font-size: 12px; }
       .nav a { font-size: 13px; }
-      .loading-text { font-size: 12px; }
+      button { padding: 10px 20px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -417,9 +332,6 @@
       }
       #bgCanvas {
         display: none;
-      }
-      .loading-circle, .loading-text, .loading-animation {
-        animation: none;
       }
     }
 
@@ -441,8 +353,6 @@
       <div class="nav-inner">
         <div class="logo">Lippie AI</div>
         <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="https://lippie-backend-yasmeenhaneef06.replit.app/login">Login</a>
-        <a class="nav-link" href="https://lippie-backend-yasmeenhaneef06.replit.app/register">Register</a>
         <a class="nav-link" href="/#features">Features</a>
         <a class="nav-link" href="/#why">Why Lippie</a>
         <a class="nav-link" href="/#reviews">Reviews</a>
@@ -455,24 +365,14 @@
   </nav>
 
   <main class="container">
-    <div id="flash-messages"></div>
     <section class="section reveal">
       <h1 class="h1">Contact Us</h1>
-      <p>Have questions or need support? Reach out to the Lippie AI team!</p>
-      <form id="contact-form" class="form-group" action="https://lippie-backend-yasmeenhaneef06.replit.app/contact" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required aria-label="Your Name">
-        <input type="email" name="email" placeholder="Your Email" required aria-label="Your Email">
-        <textarea name="message" placeholder="Your Message" rows="5" required aria-label="Your Message"></textarea>
-        <button type="submit" class="btn" aria-label="Submit Contact Form">Send Message</button>
-      </form>
-      <p>Or email us directly at <a href="mailto:sufiyanuu06175@gmail.com">sufiyanuu06175@gmail.com</a>.</p>
-      <div class="loading-overlay" id="loading-overlay">
-        <div class="loading-animation">
-          <div class="loading-circle"></div>
-          <div class="loading-circle"></div>
-          <div class="loading-circle"></div>
-        </div>
-        <div class="loading-text">Sending your message...</div>
+      <p>Have questions or feedback? Reach out to our team, and we’ll get back to you soon.</p>
+      <div class="form-container">
+        <input type="text" id="name" placeholder="Your Name" aria-label="Your Name">
+        <input type="text" id="email" placeholder="Your Email" aria-label="Your Email">
+        <textarea id="message" placeholder="Your Message" aria-label="Your Message"></textarea>
+        <button onclick="submitContact()">Send Message</button>
       </div>
     </section>
   </main>
@@ -504,26 +404,30 @@
         document.querySelectorAll('.nav a').forEach(link => {
           link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
-            if (href.startsWith('/#') || href === '/') {
+            if (href.startsWith('/#')) {
               e.preventDefault();
-              const isHomeLink = href === '/';
-              const targetId = isHomeLink ? 'hero' : href.split('#')[1];
-              const targetElement = document.getElementById(targetId);
-              if (targetElement) {
-                window.scrollTo({
-                  top: targetElement.offsetTop,
-                  behavior: 'smooth'
-                });
-                if (window.innerWidth <= 768) {
-                  navInner.classList.remove('active');
-                }
-              } else if (isHomeLink) {
-                window.location.href = '/';
-                if (window.innerWidth <= 768) {
-                  navInner.classList.remove('active');
+              const targetId = href.split('#')[1];
+              if (window.location.pathname === '/') {
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                  window.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                  });
+                  if (window.innerWidth <= 768) {
+                    navInner.classList.remove('active');
+                  }
+                } else {
+                  window.location.href = '/#' + targetId;
                 }
               } else {
                 window.location.href = href;
+              }
+            } else if (href === '/') {
+              e.preventDefault();
+              window.location.href = '/';
+              if (window.innerWidth <= 768) {
+                navInner.classList.remove('active');
               }
             }
           });
@@ -657,7 +561,7 @@
             document.addEventListener('mousemove', (e) => {
               gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
             });
-            document.querySelectorAll('a, button, input, textarea').forEach(el => {
+            document.querySelectorAll('a, button').forEach(el => {
               el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
               el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
             });
@@ -724,48 +628,34 @@
         console.warn('GSAP animations initialization failed:', err.message);
       }
 
-      // Form submission logic
-      const form = document.getElementById('contact-form');
-      const flashMessages = document.getElementById('flash-messages');
-      const loadingOverlay = document.getElementById('loading-overlay');
-      if (form && flashMessages && loadingOverlay) {
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          flashMessages.innerHTML = '';
-
-          // Show loading animation
-          loadingOverlay.style.display = 'flex';
-
-          const formData = new FormData(form);
-          try {
-            const response = await fetch(form.action, {
-              method: 'POST',
-              body: formData
-            });
-            const data = await response.json();
-            loadingOverlay.style.display = 'none';
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `flash-message ${data.message.includes('successfully') ? 'success' : 'error'}`;
-            messageDiv.textContent = data.message;
-            flashMessages.appendChild(messageDiv);
-
-            if (data.message.includes('successfully')) {
-              form.reset();
-              setTimeout(() => {
-                flashMessages.innerHTML = '';
-              }, 5000);
-            }
-          } catch (error) {
-            loadingOverlay.style.display = 'none';
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'flash-message error';
-            messageDiv.textContent = `Error: Failed to send message. Please try again later.`;
-            flashMessages.appendChild(messageDiv);
-            console.error('Form submission error:', error);
+      // Form submission
+      window.submitContact = async function() {
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+        if (!name || !email || !message) {
+          alert('Please fill out all fields.');
+          return;
+        }
+        try {
+          const response = await fetch('https://lippie-backend-yasmeenhaneef06.replit.app/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message })
+          });
+          const data = await response.json();
+          if (response.ok) {
+            alert('Message sent successfully! We’ll get back to you soon.');
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+          } else {
+            alert('Error: ' + (data.error || 'Failed to send message.'));
           }
-        });
-      }
+        } catch (error) {
+          alert('Network error: ' + error.message);
+        }
+      };
 
       // Initialize navigation
       handleNavigation();
