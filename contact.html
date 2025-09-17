@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Contact Lippie AI for support or inquiries about our AI-powered clip generator.">
-  <meta name="keywords" content="Lippie AI, contact, AI clip generator, support">
+  <meta name="keywords" content="Lippie AI, contact, AI clip generator, support, video editing AI">
+  <meta name="google-adsense-account" content="ca-pub-5278017339767767">
   <meta property="og:title" content="Lippie AI - Contact Us">
   <meta property="og:description" content="Get in touch with Lippie AI for help with our video clip generation services.">
-  <meta property="og:image" content="https://lippieai.netlify.app/static/images/og-image.jpg">
+  <meta property="og:image" content="/static/images/og-image.jpg">
   <meta property="og:url" content="https://lippieai.netlify.app/contact.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Lippie AI - Contact Us">
   <meta name="twitter:description" content="Get in touch with Lippie AI for help with our video clip generation services.">
-  <meta name="twitter:image" content="https://lippieai.netlify.app/static/images/og-image.jpg">
+  <meta name="twitter:image" content="/static/images/og-image.jpg">
   <link rel="icon" type="image/png" href="/static/images/favicon.png">
   <title>Lippie AI - Contact Us</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Google Analytics (replace with your ID) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -25,8 +25,7 @@
     gtag('js', new Date());
     gtag('config', 'G-XXXXXXXXXX');
   </script>
-  <!-- Google AdSense (replace with your ID) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5278017339767767"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5278017339767767" crossorigin="anonymous"></script>
   <style>
     :root {
       --bg: #021018;
@@ -60,28 +59,28 @@
     .container {
       max-width: var(--container);
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 16px;
       text-align: center;
     }
 
     .nav {
       position: sticky;
-      top: 16px;
+      top: 8px;
       z-index: 60;
-      display: flex;
-      justify-content: center;
-      padding: 12px 0;
+      padding: 8px 0;
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 999px;
       box-shadow: 0 8px 28px rgba(0,0,0,0.45);
       border: 1px solid rgba(255,255,255,0.03);
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .logo {
@@ -92,7 +91,7 @@
     .nav a {
       color: var(--muted);
       text-decoration: none;
-      padding: 8px 10px;
+      padding: 6px 8px;
       border-radius: 8px;
       font-weight: 600;
       font-size: 14px;
@@ -104,15 +103,25 @@
       color: var(--panel);
     }
 
+    .nav-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--cyan);
+      background: none;
+      border: none;
+      padding: 8px;
+    }
+
     .section {
-      padding: 72px 0;
+      padding: 48px 0;
     }
 
     .h1 {
       font-family: 'Poppins', sans-serif;
-      font-size: 36px;
-      line-height: 1.02;
-      margin: 14px 0 8px;
+      font-size: 28px;
+      line-height: 1.1;
+      margin: 12px 0 8px;
       font-weight: 800;
       background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
       -webkit-background-clip: text;
@@ -121,7 +130,7 @@
 
     p {
       color: var(--muted);
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.5;
       margin: 10px 0;
     }
@@ -129,19 +138,19 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
       max-width: 600px;
       margin: 20px auto;
     }
 
     input[type="text"], input[type="email"], textarea {
       width: 100%;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 12px;
+      border-radius: 6px;
       border: 1px solid var(--cyan-dark);
       background: transparent;
       color: #fff;
-      font-size: 16px;
+      font-size: 14px;
       outline: none;
       transition: border-color 0.3s;
     }
@@ -155,70 +164,204 @@
     }
 
     .btn {
-      padding: 12px 16px;
-      border-radius: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
       border: 0;
       cursor: pointer;
       font-weight: 700;
       font-size: 14px;
       color: #fff;
       background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
-      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45);
       transition: all 0.3s ease;
     }
 
     .btn:hover {
       transform: scale(1.02);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.5);
     }
 
     .flash-message {
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 14px;
+      max-width: 90%;
     }
+
     .flash-message.success {
       background: rgba(0, 255, 0, 0.2);
       color: #00ff00;
     }
+
     .flash-message.error {
       background: rgba(255, 0, 0, 0.2);
-      color: #ff0000;
+      color: #ff6b6b;
+    }
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 16, 24, 0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .loading-animation {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      transform: scale(1);
+      animation: pulseLoader 2s infinite ease-in-out;
+    }
+
+    .loading-circle {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 4px solid transparent;
+      border-top-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin 1.2s ease-in-out infinite;
+    }
+
+    .loading-circle:nth-child(2) {
+      border-top-color: var(--cyan-light);
+      animation-delay: 0.4s;
+    }
+
+    .loading-circle:nth-child(3) {
+      border-top-color: var(--cyan-dark);
+      animation-delay: 0.8s;
+    }
+
+    .loading-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-shadow: 0 0 10px var(--cyan);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseLoader {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    footer {
+      padding: 48px 0;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-top: 1px solid var(--glass);
+      box-shadow: 0 -8px 28px rgba(0,0,0,0.45);
+      z-index: 10;
+      width: 100%;
+    }
+
+    .footer-container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 16px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 100px;
+    }
+
+    .footer-container span {
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .footer-links {
-      margin-top: 10px;
+      margin-top: 8px;
     }
+
     .footer-links a {
       color: var(--muted);
       text-decoration: none;
-      padding: 0 8px;
-      font-size: 14px;
+      padding: 0 6px;
+      font-size: 12px;
     }
+
     .footer-links a:hover {
       color: var(--cyan);
     }
 
-    @media (max-width: 980px) {
-      .h1 { font-size: 22px; }
+    @media (max-width: 768px) {
+      .nav-inner {
+        display: none;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
+      }
+
+      .nav-inner.active {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .h1 { font-size: 24px; }
+      p { font-size: 13px; }
+      .btn { font-size: 13px; padding: 8px 12px; }
+      .form-group { margin: 16px auto; }
+      .loading-text { font-size: 13px; }
+      .footer-container {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .section { padding: 32px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .h1 { font-size: 20px; }
+      p { font-size: 12px; }
+      .btn { font-size: 12px; }
+      .nav a { font-size: 13px; }
     }
   </style>
 </head>
 <body>
   <nav class="nav">
-    <div class="nav-inner container">
-      <div class="logo">Lippie AI</div>
-      <a class="nav-link" href="/index.html">Home</a>
-      <a class="nav-link" href="/login.html">Login</a>
-      <a class="nav-link" href="/register.html">Register</a>
-      <a class="nav-link" href="/#features">Features</a>
-      <a class="nav-link" href="/#why">Why Lippie</a>
-      <a class="nav-link" href="/#reviews">Reviews</a>
-      <a class="nav-link" href="/#faq">FAQ</a>
-      <a class="nav-link" href="/privacy-policy.html">Privacy</a>
-      <a class="nav-link" href="/terms.html">Terms</a>
-      <a class="nav-link" href="/contact.html">Contact</a>
+    <div class="container">
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <div class="nav-inner">
+        <div class="logo">Lippie AI</div>
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/#features">Features</a>
+        <a class="nav-link" href="/#why">Why Lippie</a>
+        <a class="nav-link" href="/#reviews">Reviews</a>
+        <a class="nav-link" href="/#faq">FAQ</a>
+        <a class="nav-link" href="/privacy-policy.html">Privacy</a>
+        <a class="nav-link" href="/terms.html">Terms</a>
+        <a class="nav-link" href="/contact.html">Contact</a>
+      </div>
     </div>
   </nav>
 
@@ -234,26 +377,81 @@
         <button type="submit" class="btn" aria-label="Submit Contact Form">Send Message</button>
       </form>
       <p>Or email us directly at <a href="mailto:sufiyanuu06175@gmail.com">sufiyanuu06175@gmail.com</a>.</p>
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-animation">
+          <div class="loading-circle"></div>
+          <div class="loading-circle"></div>
+          <div class="loading-circle"></div>
+        </div>
+        <div class="loading-text">Sending your message...</div>
+      </div>
     </section>
   </main>
 
-  <footer class="container">
-    <p>© 2025 Lippie AI. Join 500k+ creators.</p>
-    <div class="footer-links">
-      <a href="/privacy-policy.html">Privacy Policy</a> |
-      <a href="/terms.html">Terms of Service</a> |
-      <a href="/contact.html">Contact</a>
+  <footer>
+    <div class="footer-container">
+      <span>© 2025 Lippie AI.</span> Join 1.5M+ creators worldwide.
+      <div class="footer-links">
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms.html">Terms of Service</a> |
+        <a href="/contact.html">Contact</a>
+      </div>
     </div>
   </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Toggle navigation for mobile
+      const navToggle = document.querySelector('.nav-toggle');
+      const navInner = document.querySelector('.nav-inner');
+      if (navToggle && navInner) {
+        navToggle.addEventListener('click', () => {
+          navInner.classList.toggle('active');
+        });
+      }
+
+      // Handle anchor navigation
+      function handleNavigation() {
+        document.querySelectorAll('.nav a').forEach(link => {
+          link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href.startsWith('/#') || href === '/') {
+              e.preventDefault();
+              const isHomeLink = href === '/';
+              const targetId = isHomeLink ? 'hero' : href.split('#')[1];
+              const targetElement = document.getElementById(targetId);
+              if (targetElement) {
+                window.scrollTo({
+                  top: targetElement.offsetTop,
+                  behavior: 'smooth'
+                });
+                if (window.innerWidth <= 768) {
+                  navInner.classList.remove('active');
+                }
+              } else if (isHomeLink) {
+                window.location.href = '/';
+                if (window.innerWidth <= 768) {
+                  navInner.classList.remove('active');
+                }
+              } else {
+                window.location.href = href;
+              }
+            }
+          });
+        });
+      }
+
+      // Form submission logic
       const form = document.getElementById('contact-form');
       const flashMessages = document.getElementById('flash-messages');
-      if (form && flashMessages) {
+      const loadingOverlay = document.getElementById('loading-overlay');
+      if (form && flashMessages && loadingOverlay) {
         form.addEventListener('submit', async (e) => {
           e.preventDefault();
           flashMessages.innerHTML = '';
+
+          // Show loading animation
+          loadingOverlay.style.display = 'flex';
 
           const formData = new FormData(form);
           try {
@@ -262,22 +460,32 @@
               body: formData
             });
             const data = await response.json();
+            loadingOverlay.style.display = 'none';
+
             const messageDiv = document.createElement('div');
             messageDiv.className = `flash-message ${data.message.includes('successfully') ? 'success' : 'error'}`;
             messageDiv.textContent = data.message;
             flashMessages.appendChild(messageDiv);
+
             if (data.message.includes('successfully')) {
               form.reset();
+              setTimeout(() => {
+                flashMessages.innerHTML = '';
+              }, 5000);
             }
           } catch (error) {
+            loadingOverlay.style.display = 'none';
             const messageDiv = document.createElement('div');
             messageDiv.className = 'flash-message error';
-            messageDiv.textContent = `Error: ${error.message}`;
+            messageDiv.textContent = `Error: Failed to send message. Please try again later.`;
             flashMessages.appendChild(messageDiv);
             console.error('Form submission error:', error);
           }
         });
       }
+
+      // Initialize navigation
+      handleNavigation();
     });
   </script>
 </body>
