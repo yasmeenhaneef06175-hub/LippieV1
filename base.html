@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Lippie AI - {% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google-adsense-account" content="ca-pub-5278017339767767">
+  <link rel="icon" type="image/png" href="/static/images/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5278017339767767" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <style>
     :root {
       --bg: #021018;
@@ -45,6 +53,7 @@
       z-index: -40;
       width: 100%;
       height: 100%;
+      display: block;
     }
 
     .bg-overlay {
@@ -53,7 +62,6 @@
       z-index: -30;
       pointer-events: none;
       background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
-      mix-blend-mode: normal;
       transition: opacity 0.4s linear;
     }
 
@@ -90,28 +98,28 @@
     .container {
       max-width: var(--container);
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 16px;
       text-align: center;
     }
 
     .nav {
       position: sticky;
-      top: 16px;
+      top: 8px;
       z-index: 60;
-      display: flex;
-      justify-content: center;
-      padding: 12px 0;
+      padding: 8px 0;
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 999px;
       box-shadow: 0 8px 28px rgba(0,0,0,0.45);
       border: 1px solid rgba(255,255,255,0.03);
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .logo {
@@ -122,7 +130,7 @@
     .nav a {
       color: var(--muted);
       text-decoration: none;
-      padding: 8px 10px;
+      padding: 6px 8px;
       border-radius: 8px;
       font-weight: 600;
       font-size: 14px;
@@ -134,107 +142,18 @@
       color: var(--panel);
     }
 
-    .section {
-      padding: 72px 0;
-    }
-
-    .hero {
-      padding-top: 84px;
-      padding-bottom: 40px;
-      position: relative;
-      z-index: 10;
-    }
-
-    .kicker {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
-      color: var(--panel);
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 36px;
-      line-height: 1.02;
-      margin: 14px 0 8px;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .lead {
-      color: var(--muted);
-      margin: 0 0 16px;
-      max-width: 56ch;
-      margin-left: auto;
-      margin-right: auto;
-      font-size: 16px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid var(--cyan-dark);
-      font-size: 1rem;
-      background: transparent;
-      color: #fff;
-      outline: none;
-      transition: transform 0.3s, border-color 0.3s;
-      margin-bottom: 15px;
-      pointer-events: auto;
-      cursor: text;
-    }
-
-    input::placeholder {
-      color: var(--muted);
-    }
-
-    input:focus {
-      border-color: var(--cyan);
-      transform: scale(1.02);
-    }
-
-    button {
-      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
-      border: none;
-      cursor: pointer !important;
-      font-weight: 700;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-    }
-
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 12px 40px rgba(0,183,235,0.3);
-    }
-
-    .status {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 10px;
-      background: var(--glass);
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .status.error {
-      background: rgba(255,75,75,0.2);
-      color: #ff4b4b;
-      border: 1px solid rgba(255,75,75,0.3);
-    }
-
-    .status.success {
-      background: rgba(0,183,235,0.2);
+    .nav-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
       color: var(--cyan);
-      border: 1px solid rgba(0,183,235,0.3);
+      background: none;
+      border: none;
+      padding: 8px;
     }
 
     footer {
-      padding: 80px 0;
+      padding: 48px 0;
       text-align: center;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
       border-top: 1px solid var(--glass);
@@ -246,15 +165,15 @@
     .footer-container {
       max-width: var(--container);
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 16px;
       color: #fff;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.9rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
-      min-height: 120px;
+      gap: 8px;
+      min-height: 100px;
     }
 
     .footer-container span {
@@ -263,14 +182,53 @@
       -webkit-text-fill-color: transparent;
     }
 
-    @media (max-width: 980px) {
-      .h1 {
-        font-size: 22px;
-      }
-      .footer-container {
+    .footer-links {
+      margin-top: 8px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0 6px;
+      font-size: 12px;
+    }
+
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+
+    .section, footer {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: reveal 0.8s ease-out forwards;
+    }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-inner {
+        display: none;
         flex-direction: column;
-        gap: 8px;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
       }
+
+      .nav-inner.active {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .footer-container { flex-direction: column; gap: 6px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav a { font-size: 13px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -296,186 +254,280 @@
   <div class="cursor"></div>
 
   <nav class="nav">
-    <div class="nav-inner container">
-      <div class="logo">Lippie AI</div>
-      <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-      {% if current_user.is_authenticated %}
-        <a class="nav-link" href="{{ url_for('logout') }}">Logout ({{ current_user.username }})</a>
-      {% else %}
-        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-      {% endif %}
+    <div class="container">
+      <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <div class="nav-inner">
+        <div class="logo">Lippie AI</div>
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="https://lippie-backend-yasmeenhaneef06.replit.app/login">Login</a>
+        <a class="nav-link" href="https://lippie-backend-yasmeenhaneef06.replit.app/register">Register</a>
+        <a class="nav-link" href="/#features">Features</a>
+        <a class="nav-link" href="/#why">Why Lippie</a>
+        <a class="nav-link" href="/#reviews">Reviews</a>
+        <a class="nav-link" href="/#faq">FAQ</a>
+        <a class="nav-link" href="/privacy-policy.html">Privacy</a>
+        <a class="nav-link" href="/terms.html">Terms</a>
+        <a class="nav-link" href="/contact.html">Contact</a>
+      </div>
     </div>
   </nav>
 
   <main class="container">
-    <section class="hero reveal">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="status {{ category }}">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-      {% block content %}{% endblock %}
+    <section class="section reveal">
+      <!-- Content will be inserted here -->
     </section>
   </main>
 
   <footer class="reveal">
     <div class="footer-container">
       <span>© 2025 Lippie AI.</span> Join 1.5M+ creators worldwide.
+      <div class="footer-links">
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms.html">Terms of Service</a> |
+        <a href="/contact.html">Contact</a>
+      </div>
     </div>
   </footer>
 
   <script>
-    try {
-      const canvas = document.getElementById('bgCanvas');
-      const gl = canvas.getContext('webgl');
-      if (!gl) throw new Error('WebGL not supported');
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        gl.viewport(0, 0, canvas.width, canvas.height);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Toggle navigation for mobile
+      const navToggle = document.querySelector('.nav-toggle');
+      const navInner = document.querySelector('.nav-inner');
+      if (navToggle && navInner) {
+        navToggle.addEventListener('click', () => {
+          navInner.classList.toggle('active');
+        });
       }
-      window.addEventListener('resize', resize);
-      resize();
-      const vsSource = `
-        precision mediump float;
-        attribute vec2 a_position;
-        attribute float a_index;
-        uniform vec2 u_mouse;
-        uniform float u_time;
-        void main() {
-          vec2 pos = a_position;
-          vec2 dist = u_mouse - pos;
-          float len = length(dist);
-          pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
-          float scale = 0.8 + 0.4 * sin(u_time + a_index);
-          gl_Position = vec4(pos * scale, 0.0, 1.0);
-          gl_PointSize = 3.0 * scale;
-        }
-      `;
-      const fsSource = `
-        precision mediump float;
-        uniform float u_time;
-        void main() {
-          float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
-          vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
-          gl_FragColor = vec4(color, 0.8);
-        }
-      `;
-      function createShader(gl, type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-          console.error(gl.getShaderInfoLog(shader));
-          gl.deleteShader(shader);
-          return null;
-        }
-        return shader;
-      }
-      const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
-      const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-      const program = gl.createProgram();
-      gl.attachShader(program, vertexShader);
-      gl.attachShader(program, fragmentShader);
-      gl.linkProgram(program);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error(gl.getProgramInfoLog(program));
-      }
-      gl.useProgram(program);
-      const positionBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      const positions = new Float32Array(2000);
-      const indices = new Float32Array(1000);
-      for (let i = 0; i < 2000; i += 2) {
-        positions[i] = Math.random() * 2 - 1;
-        positions[i + 1] = Math.random() * 2 - 1;
-        indices[i / 2] = i / 2;
-      }
-      gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-      const positionLocation = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-      const indexBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
-      const indexLocation = gl.getAttribLocation(program, 'a_index');
-      gl.enableVertexAttribArray(indexLocation);
-      gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
-      const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
-      const timeLocation = gl.getUniformLocation(program, 'u_time');
-      let mouseX = 0, mouseY = 0;
-      document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-      });
-      function render() {
-        gl.uniform2f(mouseLocation, mouseX, mouseY);
-        gl.uniform1f(timeLocation, performance.now() / 1000);
-        gl.clearColor(0.016, 0.063, 0.133, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.POINTS, 0, 1000);
-        requestAnimationFrame(render);
-      }
-      render();
-    } catch (err) {
-      console.warn('WebGL failed:', err.message);
-    }
 
-    try {
-      const cursor = document.querySelector('.cursor');
-      gsap.set(cursor, { opacity: 1, visibility: 'visible' });
-      document.addEventListener('mousemove', (e) => {
-        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
-      });
-      document.querySelectorAll('a, button, input').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-      });
-    } catch (err) {
-      console.warn('Cursor failed:', err.message);
-    }
+      // Handle anchor navigation
+      function handleNavigation() {
+        document.querySelectorAll('.nav a').forEach(link => {
+          link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href.startsWith('/#') || href === '/') {
+              e.preventDefault();
+              const isHomeLink = href === '/';
+              const targetId = isHomeLink ? 'hero' : href.split('#')[1];
+              const targetElement = document.getElementById(targetId);
+              if (targetElement) {
+                window.scrollTo({
+                  top: targetElement.offsetTop,
+                  behavior: 'smooth'
+                });
+                if (window.innerWidth <= 768) {
+                  navInner.classList.remove('active');
+                }
+              } else if (isHomeLink) {
+                window.location.href = '/';
+                if (window.innerWidth <= 768) {
+                  navInner.classList.remove('active');
+                }
+              } else {
+                window.location.href = href;
+              }
+            }
+          });
+        });
+      }
 
-    try {
-      gsap.registerPlugin(ScrollTrigger);
-      gsap.utils.toArray('.reveal').forEach(el => {
-        gsap.fromTo(el, 
-          { opacity: 0, y: 10, rotateX: 10, rotateY: 10 },
-          { 
-            opacity: 1, 
-            y: 0, 
-            rotateX: 0, 
-            rotateY: 0, 
-            duration: 0.6, 
-            ease: 'power2.out',
-            scrollTrigger: { 
-              trigger: el, 
-              start: 'top 80%', 
-              end: 'bottom 20%', 
-              toggleActions: 'restart none restart none' 
+      // WebGL particle background
+      try {
+        const canvas = document.getElementById('bgCanvas');
+        if (canvas) {
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (!gl) {
+            console.warn('WebGL not supported; hiding canvas.');
+            canvas.style.display = 'none';
+          } else {
+            function resize() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+              gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const vsSource = `
+              attribute vec2 a_position;
+              attribute float a_index;
+              uniform vec2 u_mouse;
+              uniform float u_time;
+              void main() {
+                vec2 pos = a_position;
+                vec2 dist = u_mouse - pos;
+                float len = length(dist);
+                pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
+                float scale = 0.8 + 0.4 * sin(u_time + a_index);
+                gl_Position = vec4(pos * scale, 0.0, 1.0);
+                gl_PointSize = 3.0 * scale;
+              }
+            `;
+            const fsSource = `
+              precision mediump float;
+              uniform float u_time;
+              void main() {
+                float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
+                vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
+                gl_FragColor = vec4(color, 0.8);
+              }
+            `;
+
+            function createShader(gl, type, source) {
+              const shader = gl.createShader(type);
+              gl.shaderSource(shader, source);
+              gl.compileShader(shader);
+              if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.warn('Shader compilation failed:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+              }
+              return shader;
+            }
+
+            const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+            if (!vertexShader || !fragmentShader) {
+              console.warn('Shader creation failed; hiding canvas.');
+              canvas.style.display = 'none';
+            } else {
+              const program = gl.createProgram();
+              gl.attachShader(program, vertexShader);
+              gl.attachShader(program, fragmentShader);
+              gl.linkProgram(program);
+              if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.warn('Program linking failed:', gl.getProgramInfoLog(program));
+                canvas.style.display = 'none';
+              } else {
+                gl.useProgram(program);
+
+                const positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                const positions = new Float32Array(1000);
+                const indices = new Float32Array(500);
+                for (let i = 0; i < 1000; i += 2) {
+                  positions[i] = Math.random() * 2 - 1;
+                  positions[i + 1] = Math.random() * 2 - 1;
+                  indices[i / 2] = i / 2;
+                }
+                gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+                const positionLocation = gl.getAttribLocation(program, 'a_position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+                const indexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+                const indexLocation = gl.getAttribLocation(program, 'a_index');
+                gl.enableVertexAttribArray(indexLocation);
+                gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
+
+                const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+                const timeLocation = gl.getUniformLocation(program, 'u_time');
+                let mouseX = 0, mouseY = 0;
+                document.addEventListener('mousemove', (e) => {
+                  mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                  mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                });
+
+                function render() {
+                  gl.uniform2f(mouseLocation, mouseX, mouseY);
+                  gl.uniform1f(timeLocation, performance.now() / 1000);
+                  gl.clearColor(0.016, 0.063, 0.133, 1.0);
+                  gl.clear(gl.COLOR_BUFFER_BIT);
+                  gl.drawArrays(gl.POINTS, 0, 500);
+                  requestAnimationFrame(render);
+                }
+                render();
+              }
             }
           }
-        );
-      });
-      gsap.fromTo('footer', 
-        { opacity: 0, y: 20 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1.2,
-          ease: 'power2.out',
-          scrollTrigger: { 
-            trigger: 'footer', 
-            start: 'top 95%', 
-            toggleActions: 'play none none none' 
-          }
+        } else {
+          console.warn('Canvas element not found.');
         }
-      );
-    } catch (err) {
-      console.warn('GSAP failed:', err.message);
-    }
+      } catch (err) {
+        console.warn('WebGL initialization failed:', err.message);
+      }
+
+      // Custom cursor
+      try {
+        if (typeof gsap !== 'undefined') {
+          const cursor = document.querySelector('.cursor');
+          if (cursor) {
+            gsap.set(cursor, { opacity: 1, visibility: 'visible' });
+            document.addEventListener('mousemove', (e) => {
+              gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
+            });
+            document.querySelectorAll('a, button').forEach(el => {
+              el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+              el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+          } else {
+            console.warn('Cursor element not found.');
+          }
+        } else {
+          console.warn('GSAP not loaded; custom cursor disabled.');
+        }
+      } catch (err) {
+        console.warn('Custom cursor initialization failed:', err.message);
+      }
+
+      // GSAP animations
+      try {
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          gsap.registerPlugin(ScrollTrigger);
+          const reveals = document.querySelectorAll('.reveal');
+          if (reveals.length) {
+            reveals.forEach(el => {
+              gsap.fromTo(el, 
+                { opacity: 0, y: 10 },
+                { 
+                  opacity: 1, 
+                  y: 0, 
+                  duration: 0.6, 
+                  ease: 'power2.out',
+                  scrollTrigger: { 
+                    trigger: el, 
+                    start: 'top 85%', 
+                    end: 'bottom 15%', 
+                    toggleActions: 'play none none none' 
+                  }
+                }
+              );
+            });
+          } else {
+            console.warn('No .reveal elements found for GSAP animation.');
+          }
+
+          const footer = document.querySelector('footer');
+          if (footer) {
+            gsap.fromTo(footer, 
+              { opacity: 0, y: 20 },
+              { 
+                opacity: 1, 
+                y: 0, 
+                duration: 1,
+                ease: 'power2.out',
+                scrollTrigger: { 
+                  trigger: footer, 
+                  start: 'top 90%', 
+                  toggleActions: 'play none none none' 
+                }
+              }
+            );
+          } else {
+            console.warn('Footer element not found for GSAP animation.');
+          }
+        } else {
+          console.warn('GSAP or ScrollTrigger not loaded; animations disabled.');
+        }
+      } catch (err) {
+        console.warn('GSAP animations initialization failed:', err.message);
+      }
+
+      // Initialize navigation
+      handleNavigation();
+    });
   </script>
 </body>
 </html>

@@ -26,6 +26,9 @@
     gtag('config', 'G-XXXXXXXXXX');
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5278017339767767" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
     :root {
       --bg: #021018;
@@ -54,6 +57,54 @@
       color: #fff;
       background: linear-gradient(180deg, #021018, #071627);
       overflow-x: hidden;
+    }
+
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -40;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -30;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.4));
+      transition: opacity 0.4s linear;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, var(--cyan) 20%, transparent 80%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 1;
+      display: block;
+      visibility: visible;
+      transform: translate(-50%, -50%);
+      animation: pulseCursor 1.5s infinite;
+    }
+
+    .cursor.hovered {
+      transform: translate(-50%, -50%) scale(1.5);
+    }
+
+    .cursor.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @keyframes pulseCursor {
+      0% { transform: translate(-50%, -50%) scale(0.8); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+      100% { transform: translate(-50%, -50%) scale(0.8); }
     }
 
     .container {
@@ -230,7 +281,7 @@
       border: 4px solid transparent;
       border-top-color: var(--cyan);
       border-radius: 50%;
-      animation: spin 1.2s ease-in-out infinite;
+      animation: spin 1.2s ease-in-out infinite, glow 1.5s infinite;
     }
 
     .loading-circle:nth-child(2) {
@@ -248,11 +299,22 @@
       font-weight: 700;
       color: var(--cyan);
       text-shadow: 0 0 10px var(--cyan);
+      animation: glowText 1.5s infinite ease-in-out;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 5px var(--cyan); }
+      50% { box-shadow: 0 0 15px var(--cyan); }
+    }
+
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 5px var(--cyan); }
+      50% { text-shadow: 0 0 15px var(--cyan); }
     }
 
     @keyframes pulseLoader {
@@ -337,6 +399,7 @@
         gap: 6px;
       }
       .section { padding: 32px 0; }
+      .loading-animation { width: 60px; height: 60px; }
     }
 
     @media (max-width: 480px) {
@@ -344,16 +407,42 @@
       p { font-size: 12px; }
       .btn { font-size: 12px; }
       .nav a { font-size: 13px; }
+      .loading-text { font-size: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+      #bgCanvas {
+        display: none;
+      }
+      .loading-circle, .loading-text, .loading-animation {
+        animation: none;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .cursor {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
+  <canvas id="bgCanvas"></canvas>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <div class="cursor"></div>
+
   <nav class="nav">
     <div class="container">
       <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
       <div class="nav-inner">
         <div class="logo">Lippie AI</div>
         <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="https://lippie-backend-yasmeenhaneef06.replit.app/login">Login</a>
+        <a class="nav-link" href="https://lippie-backend-yasmeenhaneef06.replit.app/register">Register</a>
         <a class="nav-link" href="/#features">Features</a>
         <a class="nav-link" href="/#why">Why Lippie</a>
         <a class="nav-link" href="/#reviews">Reviews</a>
@@ -367,7 +456,7 @@
 
   <main class="container">
     <div id="flash-messages"></div>
-    <section class="section">
+    <section class="section reveal">
       <h1 class="h1">Contact Us</h1>
       <p>Have questions or need support? Reach out to the Lippie AI team!</p>
       <form id="contact-form" class="form-group" action="https://lippie-backend-yasmeenhaneef06.replit.app/contact" method="POST">
@@ -388,7 +477,7 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="reveal">
     <div class="footer-container">
       <span>© 2025 Lippie AI.</span> Join 1.5M+ creators worldwide.
       <div class="footer-links">
@@ -439,6 +528,200 @@
             }
           });
         });
+      }
+
+      // WebGL particle background
+      try {
+        const canvas = document.getElementById('bgCanvas');
+        if (canvas) {
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (!gl) {
+            console.warn('WebGL not supported; hiding canvas.');
+            canvas.style.display = 'none';
+          } else {
+            function resize() {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+              gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            const vsSource = `
+              attribute vec2 a_position;
+              attribute float a_index;
+              uniform vec2 u_mouse;
+              uniform float u_time;
+              void main() {
+                vec2 pos = a_position;
+                vec2 dist = u_mouse - pos;
+                float len = length(dist);
+                pos += normalize(dist) * 0.05 * sin(u_time + len * 10.0);
+                float scale = 0.8 + 0.4 * sin(u_time + a_index);
+                gl_Position = vec4(pos * scale, 0.0, 1.0);
+                gl_PointSize = 3.0 * scale;
+              }
+            `;
+            const fsSource = `
+              precision mediump float;
+              uniform float u_time;
+              void main() {
+                float pulse = 0.5 + 0.5 * sin(u_time * 2.0);
+                vec3 color = mix(vec3(0.0, 0.94, 1.0), vec3(0.0, 0.83, 1.0), pulse);
+                gl_FragColor = vec4(color, 0.8);
+              }
+            `;
+
+            function createShader(gl, type, source) {
+              const shader = gl.createShader(type);
+              gl.shaderSource(shader, source);
+              gl.compileShader(shader);
+              if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.warn('Shader compilation failed:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+              }
+              return shader;
+            }
+
+            const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+            if (!vertexShader || !fragmentShader) {
+              console.warn('Shader creation failed; hiding canvas.');
+              canvas.style.display = 'none';
+            } else {
+              const program = gl.createProgram();
+              gl.attachShader(program, vertexShader);
+              gl.attachShader(program, fragmentShader);
+              gl.linkProgram(program);
+              if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.warn('Program linking failed:', gl.getProgramInfoLog(program));
+                canvas.style.display = 'none';
+              } else {
+                gl.useProgram(program);
+
+                const positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                const positions = new Float32Array(1000);
+                const indices = new Float32Array(500);
+                for (let i = 0; i < 1000; i += 2) {
+                  positions[i] = Math.random() * 2 - 1;
+                  positions[i + 1] = Math.random() * 2 - 1;
+                  indices[i / 2] = i / 2;
+                }
+                gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+                const positionLocation = gl.getAttribLocation(program, 'a_position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+                const indexBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, indexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+                const indexLocation = gl.getAttribLocation(program, 'a_index');
+                gl.enableVertexAttribArray(indexLocation);
+                gl.vertexAttribPointer(indexLocation, 1, gl.FLOAT, false, 0, 0);
+
+                const mouseLocation = gl.getUniformLocation(program, 'u_mouse');
+                const timeLocation = gl.getUniformLocation(program, 'u_time');
+                let mouseX = 0, mouseY = 0;
+                document.addEventListener('mousemove', (e) => {
+                  mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                  mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                });
+
+                function render() {
+                  gl.uniform2f(mouseLocation, mouseX, mouseY);
+                  gl.uniform1f(timeLocation, performance.now() / 1000);
+                  gl.clearColor(0.016, 0.063, 0.133, 1.0);
+                  gl.clear(gl.COLOR_BUFFER_BIT);
+                  gl.drawArrays(gl.POINTS, 0, 500);
+                  requestAnimationFrame(render);
+                }
+                render();
+              }
+            }
+          }
+        } else {
+          console.warn('Canvas element not found.');
+        }
+      } catch (err) {
+        console.warn('WebGL initialization failed:', err.message);
+      }
+
+      // Custom cursor
+      try {
+        if (typeof gsap !== 'undefined') {
+          const cursor = document.querySelector('.cursor');
+          if (cursor) {
+            gsap.set(cursor, { opacity: 1, visibility: 'visible' });
+            document.addEventListener('mousemove', (e) => {
+              gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, overwrite: 'auto' });
+            });
+            document.querySelectorAll('a, button, input, textarea').forEach(el => {
+              el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+              el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+          } else {
+            console.warn('Cursor element not found.');
+          }
+        } else {
+          console.warn('GSAP not loaded; custom cursor disabled.');
+        }
+      } catch (err) {
+        console.warn('Custom cursor initialization failed:', err.message);
+      }
+
+      // GSAP animations
+      try {
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+          gsap.registerPlugin(ScrollTrigger);
+          const reveals = document.querySelectorAll('.reveal');
+          if (reveals.length) {
+            reveals.forEach(el => {
+              gsap.fromTo(el, 
+                { opacity: 0, y: 10 },
+                { 
+                  opacity: 1, 
+                  y: 0, 
+                  duration: 0.6, 
+                  ease: 'power2.out',
+                  scrollTrigger: { 
+                    trigger: el, 
+                    start: 'top 85%', 
+                    end: 'bottom 15%', 
+                    toggleActions: 'play none none none' 
+                  }
+                }
+              );
+            });
+          } else {
+            console.warn('No .reveal elements found for GSAP animation.');
+          }
+
+          const footer = document.querySelector('footer');
+          if (footer) {
+            gsap.fromTo(footer, 
+              { opacity: 0, y: 20 },
+              { 
+                opacity: 1, 
+                y: 0, 
+                duration: 1,
+                ease: 'power2.out',
+                scrollTrigger: { 
+                  trigger: footer, 
+                  start: 'top 90%', 
+                  toggleActions: 'play none none none' 
+                }
+              }
+            );
+          } else {
+            console.warn('Footer element not found for GSAP animation.');
+          }
+        } else {
+          console.warn('GSAP or ScrollTrigger not loaded; animations disabled.');
+        }
+      } catch (err) {
+        console.warn('GSAP animations initialization failed:', err.message);
       }
 
       // Form submission logic
